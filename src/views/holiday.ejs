@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <%- include('include/header') %>
+        <title>Holiday Master</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('include/sidebar') %>
+            <div id="body" class="active">
+                <%- include('include/navBar') %>
+                    <div class="content">
+                        <div class="container">
+                            <div class="page-title mb-4">
+                                <h3>Holiday(s) <button class="btn btn-lg btn-success float-end" data-bs-toggle="modal"
+                                        data-bs-target="#edit-modal" onclick="resetData()"><i
+                                            class="fas fa-plus-circle"></i> Add</button>
+                                    <!-- onclick="loadForm('holiday')" -->
+                                </h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="card">
+                                        <!-- <div class="card-header">Basic DataTables Table</div> -->
+                                        <div class="card-body">
+                                            <p class="card-title"></p>
+                                            <table class="table table-hover table-striped" id="dataTables-example">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%- include('include/footer') %>
+            </div>
+    </div>
+    <div class="modal fade" id="edit-modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add/Edit Holiday</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-start">
+                    <form id="holidayform" action="" method="POST" enctype="multipart/form-data">
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="holidaydate" name="holidaydate"
+                                placeholder="Holiday Date" required>
+                            <label for="holidaydate">Holiday Date</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="holidaydescription" name="holidaydescription"
+                                placeholder="Holiday Description" required>
+                            <label for="holidaydescription">Holiday Description</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="kholidaydescription" name="kholidaydescription"
+                                placeholder="Kannada Holiday Description" required>
+                            <label for="kholidaydescription">Kannada Holiday Description</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="school" style="top: -12px;">School</label>
+                            <select id="school" name="school" class=" form-select multiple-select"
+                                multiple="multiple"></select>
+                        </div>
+                        <input type="hidden" id="createdby" name="createdby" value="">
+                        <input type="hidden" id="oid" name="oid" value="">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="submitData()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('include/javascript') %>
+        <script>
+            $(document).ready(function () {
+                getData();
+                school('');
+            });
+            // GET request
+            const getData = async () => {
+                try {
+                    const response = await apiRequest('get', '/api/holiday/');
+                    const createButton = (buttonType, rowID, type) => {
+                        const buttonValues = buttonType == "edit" ? 'onclick="showedit(' + (JSON.stringify(rowID).replaceAll('"', "'")) + ')" ' : 'onclick="deleteData(' + (rowID.oid) + ')"';
+                        var buttonText = buttonType == "edit" ? '<i class="fa fa-edit"></i>' : '<i class="fa fa-trash"></i>';
+                        var buttonClass = buttonType == "edit" ? "btn btn-success" : "btn btn-danger";
+                        var buttonFn = buttonType == "edit" ? buttonValues.replace(/[\[\]]/g, '') : buttonValues.replace(/[\[\]]/g, '');
+                        return '<button class="' + buttonClass + ' ' + buttonType + '" ' + buttonFn + ' type="button" >' + buttonText + '</button>&nbsp;&nbsp;';
+                    }
+                    $('table').DataTable({
+                        destroy: true,
+                        data: response.data.holiday,
+                        columns: [
+                            { title: "SL.No" },
+                            { title: "Holiday Date", data: "holidaydate" },
+                            { title: "Holiday Decsription", data: "holidaydescription" },
+                            { title: "Kannada Holiday Description", data: "kholidaydescription" },
+                            { title: "School(s)", data: "schoolname" },
+                            {
+                                title: "Actions", render: function (data, type, row) {
+                                    return createButton('edit', row, type) + createButton('delete', row);
+                                }
+                            },
+                        ],
+                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                            $("td:first", nRow).html(iDisplayIndex + 1);
+                            return nRow;
+                        },
+                        select: false,
+                        columnDefs: [{
+                            "defaultContent": "-",
+                            "targets": "_all",
+                        }],
+                        order: [[0, 'asc']],
+                        "info": true,
+                        "language": {
+                            "emptyTable": "No data available"
+                        },
+                        responsive: true,
+                        lengthChange: true,
+                        searching: true,
+                        ordering: true
+                    });
+                    $('#loader').fadeOut();
+                } catch (error) {
+                    toastr.error(error.response.data.message);
+                    console.log(error);
+                    $('#loader').fadeOut();
+                }
+            }
+
+            const deleteData = async (oid) => {
+                if (confirm("Are you sure you want to delete this item?")) {
+                    try {
+                        const response = await apiRequest('delete', '/api/holiday/delete/', { "oid": oid });
+                        getData();
+                        $('#loader').fadeOut();
+                    } catch (error) {
+                        toastr.error(error.response.data.message);
+                        console.log(error);
+                        $('#loader').fadeOut();
+                    }
+                }
+            }
+
+            const submitData = async () => {
+                const form = document.querySelector(`#holidayform`);
+                const formdata = new FormData(form);
+                const data = {};
+                for (let keyValue of formdata.entries())
+                    data[keyValue[0]] = keyValue[1];
+                data['createdby'] = user.oid;
+                data['school'] = $("#school").multipleSelect('getSelects').toString();
+
+                const method = data['oid'] != 0 ? 'put' : 'post';
+                const url = data['oid'] != 0 ? '/api/holiday/update' : '/api/holiday/addnew';
+                if (data['oid'] == "" || data['oid'] == 0)
+                    delete data['oid'];
+
+                try {
+                    const response = await apiRequest(method, url, data);
+                    if (response.data.status)
+                        toastr.success(response.data.message);
+                    $("#edit-modal").modal('hide');
+                    getData();
+                    $('#loader').fadeOut();
+                } catch (error) {
+                    toastr.error(error.response.data.message);
+                    console.log(error);
+                    $('#loader').fadeOut();
+                }
+                $('#loader').fadeOut();
+            }
+
+            const resetData = () => {
+                $('#loader').fadeIn();
+                $("input").val("");
+                document.getElementById('holidaydate').value = '';
+                $("#oid").val("0");
+                $("#school").multipleSelect('uncheckAll');
+                $("#createdby").val(user.oid);
+                $('#loader').fadeOut();
+            }
+        </script>
+</body>
+
+</html>

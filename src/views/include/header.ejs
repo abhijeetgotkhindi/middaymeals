@@ -1,0 +1,103 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link href="../../public/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../../public/vendor/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../../public/vendor/fontawesome/css/brands.min.css" rel="stylesheet">
+<link href="../../public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="../../public/vendor/datatables/datatables.min.css" rel="stylesheet">
+<link href="../../public/css/master.css" rel="stylesheet">
+<link href="../../public/vendor/flagiconcss/css/flag-icon.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link href="https://unpkg.com/multiple-select@2.1.1/dist/multiple-select.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script>
+    if (!sessionStorage.getItem("isLoggedIn"))
+        window.location.href = '/logout';
+    const user = JSON.parse(sessionStorage.getItem("user"));
+</script>
+<style>
+    /* Sidebar base style */
+    #sidebar {
+        min-width: 250px;
+        max-width: 250px;
+        height: 100vh;
+        transition: all 0.3s;
+        z-index: 1000;
+    }
+
+    /* Hide sidebar on small screens */
+    @media (max-width: 768px) {
+        #sidebar {
+            margin-left: -250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        #sidebar.active {
+            margin-left: 0;
+        }
+
+        #content {
+            width: 100%;
+        }
+    }
+
+    /* Animate sidebar toggle */
+    #sidebarCollapse {
+        z-index: 1000;
+    }
+
+    /* Fullscreen overlay */
+    #loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        opacity: 75%;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Spinner animation */
+    .spinner {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        animation: spin 1s linear infinite;
+    }
+
+    /* Keyframes for spinner */
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .ms-choice>span {
+        position: unset !important;
+    }
+
+    .multiple-select {
+        border-radius: 3px;
+        border: 2px solid #E0E0E0;
+        background-color: #FAFAFA !important;
+        box-shadow: none !important;
+        padding-top: 1.625rem;
+        padding: 1rem .75rem;
+        padding-bottom: .625rem;
+    }
+</style>

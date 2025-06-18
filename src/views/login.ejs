@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login | Bootstrap Simple Admin Template</title>
+    <link href="../../public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../public/css/auth.css" rel="stylesheet">
+    <style>
+        /* Fullscreen overlay */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            opacity: 75%;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Spinner animation */
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div id="loader">
+        <div class="spinner"></div>
+    </div> -->
+    <div class="wrapper">
+        <div class="auth-content">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <img class="brand" src="../../public/img/logo.png" alt="logo">
+                    </div>
+                    <h6 class="mb-4" id="info"></h6>
+                    <form id="loginform" method="post">
+                        <div class="mb-3 text-start">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="text" name="username" class="form-control" placeholder="Enter your email"
+                                required>
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control"
+                                placeholder="Enter your password" required>
+                        </div>
+                        <button class="btn btn-primary mb-4" onclick="submitUser()" type="button"
+                            style="width:100%">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../public/vendor/jquery/jquery.min.js"></script>
+    <script src="../../public/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+<script>
+    if (sessionStorage.getItem("isLoggedIn"))
+        window.location.href = '/dashboard';
+    const submitUser = async () => {
+        $('#loader').fadeIn();
+        const element = document.getElementById("info");
+        element.setAttribute("disabled", "disabled");
+        element.style.color = "orange";
+        element.innerHTML = "Verifying, Please wait...!";
+        const form = document.querySelector(`#loginform`);
+        const formdata = new FormData(form);
+        const data = {};
+        for (let keyValue of formdata.entries())
+            data[keyValue[0]] = keyValue[1];
+        try {
+            const response = await axios.post('<%= appurl %>/api/auth/login', data,
+                {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            if (response.data.success) {
+                element.style.color = "green";
+                element.innerHTML = "Redirecting, Please wait...!";
+                sessionStorage.setItem("token", response.data.token);
+                sessionStorage.setItem("user", JSON.stringify(response.data.user));
+                sessionStorage.setItem("isLoggedIn", true);
+                window.location.href = '/dashboard';
+                $('#loader').fadeOut();
+            }
+            // Handle the response
+        } catch (error) {
+            element.style.color = "red";
+            element.innerHTML = "Invalid Username/Password";
+            element.removeAttribute("disabled");
+            // console.error('Error fetching data:', error);
+        }
+    }
+</script>
+
+</html>

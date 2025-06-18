@@ -1,0 +1,384 @@
+<script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../public/vendor/chartsjs/Chart.min.js"></script>
+<!-- <script src="../../public/js/dashboard-charts.js"></script> -->
+<script src="../../public/vendor/datatables/datatables.min.js"></script>
+<!-- <script src="../../public/js/initiate-datatables.js"></script> -->
+<script src="../../public/js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://unpkg.com/multiple-select@2.1.1/dist/multiple-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        validateToken();
+        ngodashboard();
+        $("#ngomain").html('<i class="fa fa-building"></i> ' + sessionStorage.getItem('ngocode'));
+        if (user.usergroup != 1) {
+                    sessionStorage.setItem('ngocode', user.ngocode);
+                    $("#ngoselection").hide();
+                    if (user.usergroup != 2)
+                        $("#ngo").parent().hide();
+                    // $("#school").parent().hide();
+                }
+                else {
+                    if ((document.referrer).includes('login')) {
+                        dashboardNgo();
+                        toastr.info("Welcome " + user.displayname);
+                    }
+                }
+    });
+
+    const axiosClient = axios.create({
+        baseURL: '<%= appurl %>', // Change this to your API base URL
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': 'Bearer: ' + sessionStorage.getItem('token'),
+        },
+        timeout: 10000000,
+    });
+
+    axiosClient.interceptors.response.use(
+        response => response,
+        error => {
+            console.error('API Error:', error.response || error.message);
+            return Promise.reject(error);
+        }
+    );
+
+    const apiRequest = async (method, url, data = {}, config = {}) => {
+        $('#loader').fadeIn();
+        try {
+            const response = await axiosClient({
+                method,
+                url,
+                data: method === 'get' ? undefined : data,
+                params: method === 'get' ? data : undefined,
+                ...config,
+            });
+            return response;
+        } catch (error) {
+            console.error('Request failed:', error);
+            throw error;
+        } finally {
+            $('#loader').fadeOut();
+        }
+    };
+
+    const validateToken = async () => {
+        try {
+            $('#loader').fadeIn();
+            const result = await axios.get('<%= appurl %>/api/protected/', // Replace with your API endpoint
+                {
+                    withCredentials: true, // Very important for cookies to be accepted
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "authorization": "Bearer: " + sessionStorage.getItem("token")
+                    },
+                }
+            );
+            if (result.data.success) {
+                $('#loader').fadeOut();
+            }
+        } catch (error) {
+            console.log(error);
+            window.location.href = '/logout';
+        }
+    }
+
+    const loadForm = async (table) => {
+        $('#loader').fadeIn();
+        try {
+            const result = await axios.get('<%= appurl %>/api/database/' + table, // Replace with your API endpoint
+                {
+                    withCredentials: true, // Very important for cookies to be accepted
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "authorization": "Bearer: " + sessionStorage.getItem("token")
+                    },
+                }
+            );
+            if (result.data.success) {
+                const columns = result.data.databaseValues;
+                const form = document.getElementById('dynamicForm');
+                form.innerHTML = '';
+                columns.forEach(col => {
+                    if (col.EXTRA.includes('auto_increment')) return; // Skip auto-increment columns
+                    if (col.COLUMN_COMMENT === "") return; // skip ID field if auto-increment
+
+                    const label = document.createElement('label');
+                    label.className = 'form-label';
+                    label.textContent = (col.COLUMN_COMMENT);
+                    label.style.display = "block";
+
+                    const input = document.createElement('input');
+                    input.className = 'form-control'
+                    input.name = col.COLUMN_NAME;
+                    input.required = col.IS_NULLABLE === 'NO';
+                    input.value = col.COLUMN_DEFAULT ?? '';
+
+                    // Map SQL types to HTML types
+                    switch (col.DATA_TYPE) {
+                        case 'int':
+                        case 'decimal':
+                            input.type = 'number';
+                            break;
+                        case 'date':
+                            input.type = 'date';
+                            break;
+                        case 'datetime':
+                            input.type = 'date';
+                            break;
+                        case 'text':
+                        case 'varchar':
+                            input.type = 'text';
+                            break;
+                        default:
+                            input.type = 'text';
+                    }
+
+                    form.appendChild(label);
+                    form.appendChild(input);
+                });
+
+            }
+        } catch (error) {
+            if (error.status == 400)
+                window.location.href = '/logout';
+            else
+                console.error('Error fetching data:', error.status);
+        }
+        $('#loader').fadeOut();
+    }
+
+    const getNextBusinessDay = (holidays = [], excludeWeekends = false) => {
+        const date = new Date();
+        date.setDate(date.getDate() + 1); // Start from tomorrow
+        const holidaySet = new Set(holidays.map(h => new Date(h).toISOString().split('T')[0]));
+        while (true) {
+            const day = date.getDay(); // 0 = Sunday, 6 = Saturday
+            const dateStr = date.toISOString().split('T')[0];
+
+            const isWeekend = (day === 0 || day === 6);
+            const isHoliday = holidaySet.has(dateStr);
+
+            if ((excludeWeekends && isWeekend) || isHoliday) {
+                date.setDate(date.getDate() + 1); // Skip to next day
+            } else {
+                break; // Valid date found
+            }
+        }
+
+        return date.toISOString().split('T')[0]; // Return in YYYY-MM-DD
+    }
+
+    const showedit = (val) => {
+        $('#loader').fadeIn();
+        $("#type").val("PUT");
+        $("#oid").val(val['oid']);
+        for (var key in val) {
+            if (val.hasOwnProperty(key)) {
+                if ($("#" + key).is('input#intentfor') || $("#" + key).is('input#holidaydate')) {
+                    const [weekday, datePart] = val[key].split(' ');
+                    const [day, month, year] = datePart.split('-');
+                    $("#" + key).val(year + "-" + month + "-" + day);
+                }
+                else if ($("#" + key).is('input')) {
+                    $("#" + key).val(val[key]);
+                }
+                else if ($("#" + key).is('select')) {
+                    $("#" + key).multipleSelect('setSelects', (val[key].toString()).split(','));
+                    $("#" + key).multipleSelect('refresh');
+                }
+            }
+        }
+        $("#edit-modal").modal('show');
+        $("#createdby").val(user.oid);
+        $('#loader').fadeOut();
+    }
+
+    const reset = () => {
+        $('#loader').fadeIn();
+        $("input").val("");
+        $("#oid").val("0");
+        $("#district").multipleSelect('uncheckAll');
+        $("#taluka").multipleSelect('uncheckAll');
+        $("#village").multipleSelect('uncheckAll');
+        $("#ngo").multipleSelect('uncheckAll');
+        $("#createdby").val(user.oid);
+        $('#loader').fadeOut();
+    }
+
+    const village = async (val) => {
+        try {
+            const response = await apiRequest('get', '/api/village/');
+            const result = response.data.village;
+            $('#village option').filter('option').remove();
+            for (var key in result)
+                $('#village').append($('<option />', { value: result[key]['oid'], text: result[key]['villagename'] }))
+
+            $('#village').multipleSelect({ placeholder: 'Village' });
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
+
+    const taluka = async (val) => {
+        try {
+            const response = await apiRequest('get', '/api/taluka/');
+            const result = response.data.taluka;
+            $('#taluka option').filter('option').remove();
+            for (var key in result)
+                $('#taluka').append($('<option />', { value: result[key]['oid'], text: result[key]['talukaname'] }))
+
+            $('#taluka').multipleSelect({ placeholder: 'Taluka' });
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
+
+    const district = async (val) => {
+        try {
+            const response = await apiRequest('get', '/api/district/');
+            const result = response.data.district;
+            $('#district option').filter('option').remove();
+            for (var key in result)
+                $('#district').append($('<option />', { value: result[key]['oid'], text: result[key]['districtname'] }))
+
+            $('#district').multipleSelect({ placeholder: 'District' });
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
+
+    const ngo = async (val) => {
+        try {
+            const response = await apiRequest('get', '/api/ngo/' + (val == 0 ? '' : val));
+            const result = response.data.ngos;
+            $('#ngo option').filter('option').remove();
+            for (var key in result)
+                $('#ngo').append($('<option />', { value: result[key]['oid'], text: result[key]['ngoname'] }))
+
+            $('#ngo').multipleSelect({ placeholder: 'NGO' });
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
+
+    const school = async (val) => {
+        try {
+            const response = await apiRequest('get', '/api/school/' + (val == 0 ? '' : val));
+            const result = response.data.schools;
+            $('#school option').filter('option').remove();
+            for (var key in result)
+                $('#school').append($('<option />', { value: result[key]['oid'], text: result[key]['schoolname'] }))
+
+            $('#school').multipleSelect({ placeholder: 'School' });
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
+
+    const usergroup = async (val) => {
+        try {
+            const response = await apiRequest('get', '/api/usergroup/');
+            const result = response.data.usergroup;
+            $('#usergroup option').filter('option').remove();
+            for (var key in result)
+                $('#usergroup').append($('<option />', { value: result[key]['oid'], text: result[key]['groupname'] }))
+
+            $('#usergroup').multipleSelect({ placeholder: 'User Group' });
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
+
+    const ngodashboard = async () => {
+        try {
+            const response = await apiRequest('get', '/api/ngo/');
+            const result = response.data.ngos;
+            $('#ngodashboard option').filter('option').remove();
+            for (var key in result)
+                $('#ngodashboard').append($('<option />', { selected: (sessionStorage.getItem('ngocode') == result[key]['ngocode'] ? true : false), value: result[key]['ngocode'], text: result[key]['ngoname'] }))
+
+            $('#ngodashboard').multipleSelect({ placeholder: 'NGO' });
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
+
+    const dashboardNgo = async () => {
+        try {
+            const response = await apiRequest('get', '/api/ngo/' + user.ngo);
+            const result = response.data.ngos;
+            const NGO = {};
+            result.forEach((item) => {
+                NGO[item['ngocode']] = item['ngoname'];
+            });
+            Swal.fire({
+                title: "Welcome " + user.displayname + "\nSelect NGO",
+                input: "select",
+                inputOptions: {
+                    NGO
+                },
+                inputValue: sessionStorage.getItem('ngocode'),
+                inputPlaceholder: "Select NGO...",
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    dashboardValues(value);
+                    // ngodashboard()
+                    $("#ngomain").html('<i class="fa fa-building"></i> ' + sessionStorage.getItem('ngocode'));
+                    window.location.reload();
+                }
+            });
+
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
+
+    const dashboardValues = async (value) => {
+        sessionStorage.setItem('ngocode', value);
+        if ((window.location.pathname).includes('dashboard'))
+            dashboard();
+    }
+
+    const holiday = async () => {
+        try {
+            const response = await apiRequest('get', '/api/holiday/'+user.ngo);
+            const result = response.data.holiday;
+            return result;
+        } catch (error) {
+            toastr.error(error?.response?.statusText || 'An error occurred');
+            console.error(error);
+            return null;
+        } finally {
+            $('#loader').fadeOut();
+        }
+    };
+</script>

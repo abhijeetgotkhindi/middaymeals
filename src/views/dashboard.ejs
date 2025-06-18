@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <%- include('include/header') %>
+        <title>Dashboard | Bootstrap Simple Admin Template</title>
+        <link href='../../public/fullcalendar/packages/core/main.css' rel='stylesheet' />
+        <link href='../../public/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
+        <style>
+            .fc-sat,
+            .fc-sun {
+                background-color: #f0e6ff;
+                /* Light purple or any color you want */
+            }
+        </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <%- include('include/sidebar') %>
+            <div id="body" class="active">
+                <%- include('include/navBar') %>
+                    <div class="content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 page-header">
+                                    <div class="page-pretitle">Overview</div>
+                                    <h2 class="page-title">Dashboard</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="content">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="teal fas fa-file-edit"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <div class="detail">
+                                                        <p class="page-title">Intent Raised</p>
+                                                        <span class="number" id="intentcreated">0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="footer">
+                                                <hr />
+                                                <div class="stats">
+                                                    <i class="fas fa-calendar"></i> For this Week
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="content">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="olive fas fa-truck-plane"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <div class="detail">
+                                                        <p class="page-title">Delivered</p>
+                                                        <span class="number" id="intentdelivered">0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="footer">
+                                                <hr />
+                                                <div class="stats">
+                                                    <i class="fas fa-calendar"></i> For this Month
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="content">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="violet fas fa-eye"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <div class="detail">
+                                                        <p class="page-title">Received</p>
+                                                        <span class="number" id="intentreceived">0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="footer">
+                                                <hr />
+                                                <div class="stats">
+                                                    <i class="fas fa-stopwatch"></i> For this Month
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="content">
+                                            <div class="head row mb-3">
+                                                <h5 class="mb-0">Summary</h5>
+                                                <div class="text-muted col-sm-6 col-md-6 col-lg-3 mt-3"> <select
+                                                        id="ngo" name="ngo" class=" form-select"
+                                                        multiple="multiple"></select>
+                                                </div>
+                                                <div class="text-muted col-sm-6 col-md-6 col-lg-3 mt-3"> <select
+                                                        id="school" name="school" class=" form-select"
+                                                        multiple="multiple"></select>
+                                                </div>
+                                                <div class="text-muted col-sm-6 col-md-6 col-lg-3 mt-3">
+                                                    <div id="date" class="form-select"
+                                                        style="background: #fff; cursor: pointer; padding: 7px 10px; border: 1px solid #ccc; width: 100%">
+                                                        <i class="fa fa-calendar"></i>&nbsp;
+                                                        <span></span> <i class="fa fa-caret-down"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="text-muted col-sm-6 col-md-6 col-lg-3 mt-3"> <button
+                                                        type="button" class="from-select btn btn-success"
+                                                        onclick="dashboard();">Apply</button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="canvas-wrapper col-md-6">
+                                                    <table class="table table-striped">
+                                                        <thead class="success">
+                                                            <tr>
+                                                                <th></th>
+                                                                <th class="text-end"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">No Of Meals</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="nofomeals">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">Rice</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="rice">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">Sambar</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="sambar">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">Milk</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="milk">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">Egg</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="egg">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm"> Chikki</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="shengachikki">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">Banana</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="banana">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">Total</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="total">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">Delivered</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="delivered">0</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm">Received</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-end"><span
+                                                                        class="text-xs font-weight-bold"
+                                                                        id="received">0</span></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="canvas-wrapper col-md-6 float-end">
+                                                    <div id='calendar'></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%- include('include/footer') %>
+            </div>
+    </div>
+    <%- include('include/javascript') %>
+        <script src='../../public/fullcalendar/packages/core/main.js'></script>
+        <script src='../../public/fullcalendar/packages/interaction/main.js'></script>
+        <script src='../../public/fullcalendar/packages/daygrid/main.js'></script>
+        <script>
+            $(document).ready(function () {
+                var start = moment().subtract(0, 'days');
+                var end = moment();
+                function cb(start, end) {
+                    $('#date span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+                }
+                $('#date').daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Tomorrow': [moment().add(1, 'days'), moment().add(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }, cb);
+
+                cb(start, end);
+                ngo(user.ngo)
+                school(user.school)
+                
+                getCalendar();
+            });
+
+            const getCalendar = async () => {
+                var calendarEl = document.getElementById('calendar');
+                const holidays = await holiday();
+                const holidaysArray = holidays.map(item => ({
+                    title: item.holidaydescription,
+                    start: item.holidays,
+                    end: item.holidays
+                }));
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    timeZone: 'local', // the default (unnecessary to specify)
+                    plugins: ['interaction', 'dayGrid'],
+                    defaultDate: (new Date()).toISOString().slice(0, 10),
+                    editable: false,
+                    eventLimit: false, // allow "more" link when too many events
+                    events: holidaysArray
+                });
+
+                calendar.render();
+            }
+
+            const dashboard = () => {
+                const data = {};
+                const ngo = $("#ngo").multipleSelect('getSelects').toString();
+                const school = $("#school").multipleSelect('getSelects').toString();
+                data['ngocode'] = sessionStorage.getItem('ngocode');
+                data['startdate'] = $("#date span").html().split(" - ")[0];
+                data['enddate'] = $("#date span").html().split(" - ")[1];
+                data['ngo'] = ngo == '' ? user.ngo : ngo;
+                data['school'] = school == '' ? user.school : school;
+                apiRequest('post', '/api/dashboard/', data)
+                    .then(response => {
+                        const result = response.data.dashboardValues[0];
+                        for (const [key, value] of Object.entries(result)) {
+                            $("#" + key).html(result[key]);
+                        }
+                        $("#intentcreated").html(result['created']);
+                        $("#intentreceived").html(result['received']);
+                        $("#intentdelivered").html(result['delivered']);
+                        $('#loader').fadeOut();
+                    })
+                    .catch(error => {
+                        toastr.error(error.response.statusText);
+                        console.log(error.response.data.message);
+                        $('#loader').fadeOut();
+                    });
+            }
+        </script>
+</body>
+
+</html>
