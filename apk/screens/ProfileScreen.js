@@ -5,7 +5,7 @@ import Header from '../components/Header';
 export default function DashboardScreen() {
   return (
     <View style={styles.container}>
-      <Header/>
+      <Header pageTitle="Profile" />
       <Text>Welcome to the Profile!</Text>
     </View>
   );

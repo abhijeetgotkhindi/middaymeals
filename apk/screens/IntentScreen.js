@@ -101,115 +101,115 @@ export default function IntentScreen() {
   };
 
   return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-                  <Header />
-    <PaperProvider theme={DefaultTheme}>
-      <Portal>
-        <Modal
-          visible={modalVisible}
-          onDismiss={handleModalClose}
-          contentContainerStyle={styles.modalContainer}
-        >
-          <ScrollView >
-            <Text style={styles.modalTitle}>Add/Edit Intent(s)</Text>
-
-            <Button
-              mode="outlined"
-              onPress={() => setShowDatePicker(true)}
-              style={styles.input}
-            >
-              Intent For: {formData.intentfor.toDateString()}
-            </Button>
-
-            {showDatePicker && (
-              <DatePickerModal
-                locale="en"
-                mode="single"
-                visible={showDatePicker}
-                onDismiss={() => setShowDatePicker(false)}
-                date={formData.intentfor}
-                onConfirm={({ date }) => {
-                  setShowDatePicker(false);
-                  handleChange('intentfor', date);
-                }}
-              />
-            )}
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-              style={{ maxHeight: 500 }}
-            >
-              <MultiSelect
-                items={school}
-                uniqueKey="oid"
-                onSelectedItemsChange={onSelectedSchoolChange}
-                selectedSchools={selectedSchool}
-                selectText="Select School..."
-                single={true} // this prop is not officially supported but you can try adding it
-                searchInputPlaceholderText="Search Schools..."
-                hideSubmitButton
-                hideDropdown={false}
-                styleMainWrapper={{
-                  borderWidth: 1,
-                  borderColor: 'black',
-                  borderRadius: 5, paddingLeft: 20
-                }}
-              />
-            </KeyboardAvoidingView>
-            {['totalpresent', 'milk', 'rice', 'sambar', 'egg', 'shengachikki', 'banana'].map(
-              (field) => (
-                <TextInput
-                  key={field}
-                  label={field.charAt(0).toUpperCase() + field.slice(1)}
-                  value={formData[field]}
-                  onChangeText={(text) => handleChange(field, text)}
-                  keyboardType="numeric"
-                  style={styles.input}
-                  mode="outlined"
-                />
-              )
-            )}
-
-            <TextInput
-              label="Total"
-              value={formData.total}
-              mode="outlined"
-              style={styles.input}
-              editable={false}
-            />
-
-            <View style={styles.buttonRow}>
-              <Button mode="outlined" onPress={handleModalClose} style={styles.button}>
-                Close
-              </Button>
-              <Button mode="contained-tonal" onPress={() => handleSubmit(-1)} style={styles.button}>
-                Draft
-              </Button>
-              <Button mode="contained" onPress={() => handleSubmit(1)} style={styles.button}>
-                Save
-              </Button>
-            </View>
-          </ScrollView>
-        </Modal>
-      </Portal>
-
-      <View style={styles.container}>
-        <Text>Intent Screen</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <Header pageTitle="Intent" />
+      <PaperProvider theme={DefaultTheme}>
         <Portal>
-          <FAB.Group
-            open={fabOpen}
-            icon="plus"
-            actions={[]}
-            onStateChange={({ open }) => { getSchool(), setFabOpen(open) }}
-            onPress={() => {
-              if (!fabOpen) setModalVisible(true);
-            }}
-            visible={true}
-          />
+          <Modal
+            visible={modalVisible}
+            onDismiss={handleModalClose}
+            contentContainerStyle={styles.modalContainer}
+          >
+            <ScrollView >
+              <Text style={styles.modalTitle}>Add/Edit Intent(s)</Text>
+
+              <Button
+                mode="outlined"
+                onPress={() => setShowDatePicker(true)}
+                style={styles.input}
+              >
+                Intent For: {formData.intentfor.toDateString()}
+              </Button>
+
+              {showDatePicker && (
+                <DatePickerModal
+                  locale="en"
+                  mode="single"
+                  visible={showDatePicker}
+                  onDismiss={() => setShowDatePicker(false)}
+                  date={formData.intentfor}
+                  onConfirm={({ date }) => {
+                    setShowDatePicker(false);
+                    handleChange('intentfor', date);
+                  }}
+                />
+              )}
+              <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ maxHeight: 500 }}
+              >
+                <MultiSelect
+                  items={school}
+                  uniqueKey="oid"
+                  onSelectedItemsChange={onSelectedSchoolChange}
+                  selectedSchools={selectedSchool}
+                  selectText="Select School..."
+                  single={true} // this prop is not officially supported but you can try adding it
+                  searchInputPlaceholderText="Search Schools..."
+                  hideSubmitButton
+                  hideDropdown={false}
+                  styleMainWrapper={{
+                    borderWidth: 1,
+                    borderColor: 'black',
+                    borderRadius: 5, paddingLeft: 20
+                  }}
+                />
+              </KeyboardAvoidingView>
+              {['totalpresent', 'milk', 'rice', 'sambar', 'egg', 'shengachikki', 'banana'].map(
+                (field) => (
+                  <TextInput
+                    key={field}
+                    label={field.charAt(0).toUpperCase() + field.slice(1)}
+                    value={formData[field]}
+                    onChangeText={(text) => handleChange(field, text)}
+                    keyboardType="numeric"
+                    style={styles.input}
+                    mode="outlined"
+                  />
+                )
+              )}
+
+              <TextInput
+                label="Total"
+                value={formData.total}
+                mode="outlined"
+                style={styles.input}
+                editable={false}
+              />
+
+              <View style={styles.buttonRow}>
+                <Button mode="outlined" onPress={handleModalClose} style={styles.button}>
+                  Close
+                </Button>
+                <Button mode="contained-tonal" onPress={() => handleSubmit(-1)} style={styles.button}>
+                  Draft
+                </Button>
+                <Button mode="contained" onPress={() => handleSubmit(1)} style={styles.button}>
+                  Save
+                </Button>
+              </View>
+            </ScrollView>
+          </Modal>
         </Portal>
-      </View>
-    </PaperProvider>
-            </SafeAreaView>
-    
+
+        <View style={styles.container}>
+          <Text>Intent Screen</Text>
+          <Portal>
+            <FAB.Group
+              open={fabOpen}
+              icon="plus"
+              actions={[]}
+              onStateChange={({ open }) => { getSchool(), setFabOpen(open) }}
+              onPress={() => {
+                if (!fabOpen) setModalVisible(true);
+              }}
+              visible={true}
+            />
+          </Portal>
+        </View>
+      </PaperProvider>
+    </SafeAreaView>
+
   );
 }
 
@@ -238,9 +238,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 4,
   },
 });
