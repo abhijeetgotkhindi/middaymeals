@@ -20,28 +20,28 @@ import { useFocusEffect } from '@react-navigation/native';
 import { DatePickerModal, registerTranslation } from 'react-native-paper-dates';
 import en from 'date-fns/locale/en-US'
 import { format } from 'date-fns';
-import MultiSelect from 'react-native-multiple-select';
+import { MultiSelect } from 'react-native-element-dropdown';
 import { Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome'; // or Ionicons, MaterialIcons, etc.
 
 export default function DashboardScreen() {
     registerTranslation('en', {
-  save: 'Save',
-  selectSingle: 'Select date',
-  selectMultiple: 'Select dates',
-  selectRange: 'Select period',
-  notAccordingToDateFormat: (inputFormat) => `Date format should be`,// ${inputFormat}
-  mustBeHigherThan: (date) => `Must be later than `,//${date}
-  mustBeLowerThan: (date) => `Must be earlier than`,// ${date}
-  mustBeBetween: (startDate, endDate) => `Must be between `,//${startDate} - ${endDate}
-  dateIsDisabled: 'Date is not allowed',
-  previous: 'Previous',
-  next: 'Next',
-  typeInDate: 'Type in date',
-  pickDateFromCalendar: 'Pick date from calendar',
-  close: 'Close',
-});
+        save: 'Save',
+        selectSingle: 'Select date',
+        selectMultiple: 'Select dates',
+        selectRange: 'Select period',
+        notAccordingToDateFormat: (inputFormat) => `Date format should be`,// ${inputFormat}
+        mustBeHigherThan: (date) => `Must be later than `,//${date}
+        mustBeLowerThan: (date) => `Must be earlier than`,// ${date}
+        mustBeBetween: (startDate, endDate) => `Must be between `,//${startDate} - ${endDate}
+        dateIsDisabled: 'Date is not allowed',
+        previous: 'Previous',
+        next: 'Next',
+        typeInDate: 'Type in date',
+        pickDateFromCalendar: 'Pick date from calendar',
+        close: 'Close',
+    });
     const { user, logout } = useContext(AuthContext);
     const { request } = useApi();
     const [dashboardvalues, setDashboardValues] = useState([]);
@@ -86,7 +86,7 @@ export default function DashboardScreen() {
                 setDashboardValues(result.dashboardValues[0]);
             }
         } catch (error) {
-            if(!error.status)
+            if (!error.status)
                 logout();
             // console.error('Dashboard error:', error.response?.data || error.message);
         }
@@ -108,7 +108,7 @@ export default function DashboardScreen() {
                 setschool(filteredData);
             }
         } catch (error) {
-            if(!error.status)
+            if (!error.status)
                 logout();
             // console.error('School error:', error.response?.data || error.message);
         }
@@ -119,6 +119,7 @@ export default function DashboardScreen() {
             if (user?.school && user?.ngocode) {
                 getSchool();
                 getDashboard();
+                setSelectedSchool([]);
             }
         }, [getSchool, getDashboard])
     );
@@ -126,7 +127,7 @@ export default function DashboardScreen() {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <Header pageTitle="Dashboard" />
             <View style={styles.headerContainer}>
-                <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.iconButton}>
+                <TouchableOpacity onPress={() => (setSelectedSchool([]),setModalVisible(true))} style={styles.iconButton}>
                     <Icon name="calendar" size={30} color="#4F8EF7" />
                     <Text style={{ paddingHorizontal: 14, paddingVertical: 8 }}>{(format(range.startDate, 'dd-MMM-yyyy'))} To {(format(range.endDate, 'dd-MMM-yyyy'))}</Text>
                 </TouchableOpacity>
@@ -146,22 +147,21 @@ export default function DashboardScreen() {
                             {/* Body */}
                             <View style={styles.modalBody}>
                                 <MultiSelect
-                                    items={school}
-                                    uniqueKey="oid"
-                                    onSelectedItemsChange={setSelectedSchool}
-                                    selectedItems={selectedSchool}
-                                    selectText="Select School(s)..."
-                                    searchInputPlaceholderText="Search School(s)..."
-                                    tagRemoveIconColor="#CCC"
-                                    tagBorderColor="#CCC"
-                                    tagTextColor="#333"
-                                    selectedItemTextColor="#007BFF"
-                                    selectedItemIconColor="#007BFF"
-                                    itemTextColor="#000"
-                                    searchInputStyle={{ color: '#000' }}
-                                    styleMainWrapper={{ marginBottom: 15 }}
+                                    style={styles.dropdown}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    inputSearchStyle={styles.inputSearchStyle}
+                                    iconStyle={styles.iconStyle}
+                                    data={school}
+                                    labelField="name"
+                                    valueField="oid"
+                                    key="oid"
+                                    placeholder="Select School(s)"
+                                    search
+                                    value={selectedSchool}
+                                    onChange={item => setSelectedSchool(item)}
+                                    selectedStyle={styles.selectedStyle}
                                 />
-
                                 <View style={styles.datePickerRow}>
                                     <NButton
                                         icon="calendar"
@@ -428,5 +428,33 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 8,
 
-    }
+    },
+    dropdown: {
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        marginBottom: 10,
+    },
+    placeholderStyle: {
+        fontSize: 16,
+        color: '#999',
+    },
+    selectedTextStyle: {
+        fontSize: 14,
+        color: '#000',
+    },
+    iconStyle: {
+        width: 20,
+        height: 20,
+    },
+    inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
+    },
+    selectedStyle: {
+        borderRadius: 12,
+    },
+
 });
