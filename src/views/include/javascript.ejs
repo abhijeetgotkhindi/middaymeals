@@ -16,18 +16,18 @@
         ngodashboard();
         $("#ngomain").html('<i class="fa fa-building"></i> ' + sessionStorage.getItem('ngocode'));
         if (user.usergroup != 1) {
-                    sessionStorage.setItem('ngocode', user.ngocode);
-                    $("#ngoselection").hide();
-                    if (user.usergroup != 2)
-                        $("#ngo").parent().hide();
-                    // $("#school").parent().hide();
-                }
-                else {
-                    if ((document.referrer).includes('login')) {
-                        dashboardNgo();
-                        toastr.info("Welcome " + user.displayname);
-                    }
-                }
+            sessionStorage.setItem('ngocode', user.ngocode);
+            $("#ngoselection").hide();
+            if (user.usergroup != 2)
+                $("#ngo").parent().hide();
+            // $("#school").parent().hide();
+        }
+        else {
+            if ((document.referrer).includes('login')) {
+                dashboardNgo();
+                toastr.info("Welcome " + user.displayname);
+            }
+        }
     });
 
     const axiosClient = axios.create({
@@ -188,8 +188,10 @@
                     $("#" + key).val(val[key]);
                 }
                 else if ($("#" + key).is('select')) {
-                    $("#" + key).multipleSelect('setSelects', (val[key].toString()).split(','));
-                    $("#" + key).multipleSelect('refresh');
+                    if (val[key] != null) {
+                        $("#" + key).multipleSelect('setSelects', (val[key].toString()).split(','));
+                        $("#" + key).multipleSelect('refresh');
+                    }
                 }
             }
         }
@@ -204,6 +206,7 @@
         $("#oid").val("0");
         $("#district").multipleSelect('uncheckAll');
         $("#taluka").multipleSelect('uncheckAll');
+        $("#route").multipleSelect('uncheckAll');
         $("#village").multipleSelect('uncheckAll');
         $("#ngo").multipleSelect('uncheckAll');
         $("#createdby").val(user.oid);
@@ -377,7 +380,7 @@
 
     const holiday = async () => {
         try {
-            const response = await apiRequest('get', '/api/holiday/'+user.ngo);
+            const response = await apiRequest('get', '/api/holiday/' + user.ngo);
             const result = response.data.holiday;
             return result;
         } catch (error) {
@@ -388,4 +391,21 @@
             $('#loader').fadeOut();
         }
     };
+
+    const route = async (val) => {
+        try {
+            const response = await apiRequest('get', '/api/route/');
+            const result = response.data.route;
+            $('#route option').filter('option').remove();
+            $('#route').multipleSelect('destroy');
+            for (var key in result)
+                $('#route').append($('<option />', { value: result[key]['oid'], text: result[key]['routename'] }))
+            $('#route').multipleSelect({ placeholder: 'Route' });
+            $('#loader').fadeOut();
+        } catch (error) {
+            toastr.error(error.response.data.message);
+            console.log(error);
+            $('#loader').fadeOut();
+        }
+    }
 </script>

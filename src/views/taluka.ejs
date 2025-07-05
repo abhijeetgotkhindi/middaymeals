@@ -140,6 +140,11 @@
 
             const submitData = async () => {
                 const form = document.querySelector(`#talukaform`);
+                if (!form.checkValidity()){
+                    // Trigger built-in HTML5 validation UI
+                    form.reportValidity();
+                    return false;
+                }
                 const formdata = new FormData(form);
                 const data = {};
                 for (let keyValue of formdata.entries())

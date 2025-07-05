@@ -88,6 +88,9 @@
                             <label for="pincode">Pincode</label>
                         </div>
                         <div class="form-floating mb-3">
+                            <select id="route" name="route" class="multiple-select input-group" required></select>
+                        </div>
+                        <div class="form-floating mb-3">
                             <input type="number" class="form-control" id="contactno" name="contactno"
                                 placeholder="contactno" required>
                             <label for="contactno">Contact No</label>
@@ -295,6 +298,7 @@
                 taluka(0);
                 district(0);
                 ngo(0);
+                route(0);
                 //(JSON.stringify(Object.values(rowID)).replaceAll('"', "'"))
             });
 
@@ -394,6 +398,10 @@
 
             const submitData = async () => {
                 const form = document.querySelector(`#schoolform`);
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return false;
+                }
                 const formdata = new FormData(form);
                 const data = {};
                 for (const keyValue of formdata.entries())

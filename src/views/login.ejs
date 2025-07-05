@@ -80,7 +80,12 @@
         element.style.color = "orange";
         element.innerHTML = "Verifying, Please wait...!";
         const form = document.querySelector(`#loginform`);
-        const formdata = new FormData(form);
+        if (!form.checkValidity()){
+                    // Trigger built-in HTML5 validation UI
+                    form.reportValidity();
+                    return false;
+                }
+                const formdata = new FormData(form);
         const data = {};
         for (let keyValue of formdata.entries())
             data[keyValue[0]] = keyValue[1];
