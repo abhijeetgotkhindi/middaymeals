@@ -20,6 +20,7 @@ import pagemasterRoutes from './routes/pagemasterRoutes.js'
 import databaseRoutes from './routes/databaseRoutes.js'
 import intentRoutes from './routes/intentRoutes.js'
 import holidayRoutes from './routes/holidayRoutes.js'
+import routeRoutes from './routes/routeRoutes.js'
 import cors from 'cors'
 import path from 'path';
 dotenv.config(); // Load variables from .env
@@ -56,6 +57,7 @@ app.use('/api/pagemaster', pagemasterRoutes);
 app.use('/api/database', databaseRoutes);
 app.use('/api/intent', intentRoutes);
 app.use('/api/holiday', holidayRoutes);
+app.use('/api/route', routeRoutes);
 
 app.set('views', path.join(process.cwd() + "/src", 'views'));
 app.set('view engine', 'ejs');
@@ -80,6 +82,7 @@ app.get("/pagemaster", renderWithEnv("pagemaster"));
 app.get("/userprofile", renderWithEnv("userprofile"));
 app.get("/intentform", renderWithEnv("intentform"));
 app.get("/holiday", renderWithEnv("holiday"));
+app.get("/route", renderWithEnv("route"));
 
 app.get('/logout', (req, res) => {
   res.clearCookie('token', {

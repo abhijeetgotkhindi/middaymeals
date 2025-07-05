@@ -215,6 +215,7 @@
             const response = await apiRequest('get', '/api/village/');
             const result = response.data.village;
             $('#village option').filter('option').remove();
+            $('#village').multipleSelect('destroy');
             for (var key in result)
                 $('#village').append($('<option />', { value: result[key]['oid'], text: result[key]['villagename'] }))
 
@@ -232,6 +233,7 @@
             const response = await apiRequest('get', '/api/taluka/');
             const result = response.data.taluka;
             $('#taluka option').filter('option').remove();
+            $('#taluka').multipleSelect('destroy');
             for (var key in result)
                 $('#taluka').append($('<option />', { value: result[key]['oid'], text: result[key]['talukaname'] }))
 
@@ -249,6 +251,7 @@
             const response = await apiRequest('get', '/api/district/');
             const result = response.data.district;
             $('#district option').filter('option').remove();
+            $('#district').multipleSelect('destroy');
             for (var key in result)
                 $('#district').append($('<option />', { value: result[key]['oid'], text: result[key]['districtname'] }))
 
@@ -266,6 +269,7 @@
             const response = await apiRequest('get', '/api/ngo/' + (val == 0 ? '' : val));
             const result = response.data.ngos;
             $('#ngo option').filter('option').remove();
+            $('#ngo').multipleSelect('destroy');
             for (var key in result)
                 $('#ngo').append($('<option />', { value: result[key]['oid'], text: result[key]['ngoname'] }))
 
@@ -283,6 +287,7 @@
             const response = await apiRequest('get', '/api/school/' + (val == 0 ? '' : val));
             const result = response.data.schools;
             $('#school option').filter('option').remove();
+            $('#school').multipleSelect('destroy');
             for (var key in result)
                 $('#school').append($('<option />', { value: result[key]['oid'], text: result[key]['schoolname'] }))
 
@@ -300,6 +305,7 @@
             const response = await apiRequest('get', '/api/usergroup/');
             const result = response.data.usergroup;
             $('#usergroup option').filter('option').remove();
+            $('#usergroup').multipleSelect('destroy');
             for (var key in result)
                 $('#usergroup').append($('<option />', { value: result[key]['oid'], text: result[key]['groupname'] }))
 
@@ -317,6 +323,7 @@
             const response = await apiRequest('get', '/api/ngo/');
             const result = response.data.ngos;
             $('#ngodashboard option').filter('option').remove();
+            $('#ngodashboard').multipleSelect('destroy');
             for (var key in result)
                 $('#ngodashboard').append($('<option />', { selected: (sessionStorage.getItem('ngocode') == result[key]['ngocode'] ? true : false), value: result[key]['ngocode'], text: result[key]['ngoname'] }))
 

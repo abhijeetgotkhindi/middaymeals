@@ -3,7 +3,7 @@
 
 <head>
     <%- include('include/header') %>
-        <title>Taluka Master</title>
+        <title>Route Master</title>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
                     <div class="content">
                         <div class="container">
                             <div class="page-title mb-3">
-                                <h3>Taluka(s)
+                                <h3>Route(s)
                                     <button class="btn btn-lg btn-success float-end" data-bs-toggle="modal"
                                         data-bs-target="#edit-modal" onclick="reset()"><i
                                             class="fas fa-plus-circle"></i> Add</button>
@@ -41,20 +41,20 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add/Edit Taluka</h5>
+                    <h5 class="modal-title">Add/Edit Route</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-start">
-                    <form id="talukaform" action="" method="POST" enctype="multipart/form-data">
+                    <form id="routeform" action="" method="POST" enctype="multipart/form-data">
                         <input type="hidden" id="createdby" name="createdby" value="">
                         <input type="hidden" id="oid" name="oid" value="" />
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="talukaname" name="talukaname"
-                                placeholder="Taluka Name" required>
-                            <label for="talukaname">Taluka Name</label>
+                            <input type="text" class="form-control" id="routename" name="routename"
+                                placeholder="Route Name" required>
+                            <label for="routename">Route Name</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select id="district" name="district" placeholder="District Name"
+                            <select id="ngo" name="ngo" placeholder="NGO Name"
                                 class="multiple-select form-select"></select>
                         </div>
                     </form>
@@ -74,7 +74,7 @@
 
             const getData = async () => {
                 try {
-                    const response = await apiRequest('get', '/api/taluka/');
+                    const response = await apiRequest('get', '/api/route/');
                     const createButton = (buttonType, rowID, type) => {
                         const buttonValues = buttonType == "edit" ? 'onclick="showedit(' + (JSON.stringify(rowID).replaceAll('"', "'")) + ')" ' : 'onclick="deleteData(' + (rowID.oid) + ')"';
                         var buttonText = buttonType == "edit" ? '<i class="fa fa-edit"></i>' : '<i class="fa fa-trash"></i>';
@@ -84,11 +84,11 @@
                     }
                     $('table').DataTable({
                         destroy: true,
-                        data: response.data.taluka,
+                        data: response.data.route,
                         columns: [
                             { title: "SL.No" },
-                            { title: "Taluka Name", data: "talukaname" },
-                            { title: "District Name", data: "districtname" },
+                            { title: "Route Name", data: "routename" },
+                            { title: "NGO Name", data: "ngoname" },
                             {
                                 title: "Actions", render: function (data, type, row) {
                                     return createButton('edit', row, type) + createButton('delete', row);
@@ -115,7 +115,7 @@
                         ordering: true
                     });
 
-                    district(0);
+                    ngo(0);
                     $('#loader').fadeOut();
                 } catch (error) {
                     toastr.error(error.response.data.message);
@@ -127,7 +127,7 @@
             const deleteData = async (oid) => {
                 if (confirm("Are you sure you want to delete this item?")) {
                     try {
-                        const response = await apiRequest('delete', '/api/taluka/delete/', { "oid": oid });
+                        const response = await apiRequest('delete', '/api/route/delete/', { "oid": oid });
                         getData();
                         $('#loader').fadeOut();
                     } catch (error) {
@@ -139,7 +139,7 @@
             }
 
             const submitData = async () => {
-                const form = document.querySelector(`#talukaform`);
+                const form = document.querySelector(`#routeform`);
                 const formdata = new FormData(form);
                 const data = {};
                 for (let keyValue of formdata.entries())
@@ -147,7 +147,7 @@
                 // //data['createdby'] = user.oid;
 
                 const method = data['oid'] != 0 ? 'put' : 'post';
-                const url = data['oid'] != 0 ? '/api/taluka/update' : '/api/taluka/addnew';
+                const url = data['oid'] != 0 ? '/api/route/update' : '/api/route/addnew';
                 if (data['oid'] == "" || data['oid'] == "0")
                     delete data['oid'];
 
