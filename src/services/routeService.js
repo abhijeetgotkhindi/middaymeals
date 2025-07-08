@@ -14,8 +14,7 @@ export const routeList = async () => {
             route: route
         };
     } catch (error) {
-        console.error("Error:", error);
-        return { success: false, message: 'Failed. Please try again later.' };
+        console.error("Error:", error);        return { success: false, message: 'Failed. Please try again later.' };
     }
 };
 
@@ -48,8 +47,6 @@ export const insertRoute = async (datavalues) => {
 
 export const updateRoute = async (datavalues) => {
     const { routename, ngo, updatedBy: createdby, oid } = datavalues;
-    // console.log(datavalues);
-    // return false;
     try {
         const [results] = await pool.query("update route set routename = ?, ngo = ?, updatedby = ?, updatedtime = NOW() where oid = ?;", [routename, ngo, createdby, oid]);
         return { success: true, message: "Updated Records: " + results.affectedRows };
