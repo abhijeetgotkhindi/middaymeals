@@ -1,1 +1,12 @@
-[2025-07-05T07:38:37.097Z] [INFO] Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?)' at line 1
+[2025-06-24T13:48:32.570Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-24T13:48:47.901Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T11:41:41.095Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:16:38.216Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:22:55.576Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:23:09.601Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:25:10.678Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:26:20.854Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:26:30.099Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:27:01.581Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:27:07.288Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-06-25T12:27:25.644Z] [INFO] TypeError: datavalues.school.split is not a function

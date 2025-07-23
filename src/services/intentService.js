@@ -3,10 +3,15 @@ import { v6 as uuidv6 } from 'uuid';
 
 export const intentList = async (ngooid) => {
     try {
-        const [intent] = await pool.query(`SELECT  i.oid as intentrow,i.oid,DATE_FORMAT(intentfor,'%a %d-%m-%Y') AS intentfor,schoolname , school, totalreg, totalpresent, milk, rice, sambar, egg, shengachikki, banana, total,m.value2 as istatus,DATE_FORMAT(i.creationtime,'%h:%i %p') as creationtime,m.value,CASE 
-    WHEN i.updatedtime IS NOT NULL AND i.updatedtime > i.creationtime THEN i.updatedtime
-    ELSE i.creationtime
-  END AS createdDate FROM ` + ngooid + `_intent i
+        const [intent] = await pool.query(`SELECT  i.oid as intentrow,i.oid,DATE_FORMAT(intentfor,'%a %d-%m-%Y') AS intentfor,schoolname , school
+            , g1totalreg, g1totalpresent, g1milk, g1hotmeals, g1egg, g1banana, g1total
+            , g2totalreg, g2totalpresent, g2milk, g2hotmeals, g2egg, g2banana, g2total
+            , g3totalreg, g3totalpresent, g3milk, g3hotmeals, g3egg, g3banana, g3total
+            , g4totalreg, g4totalpresent, g4milk, g4hotmeals, g4egg, g4banana, g4total
+            ,m.value2 as istatus,DATE_FORMAT(i.creationtime,'%h:%i %p') as creationtime,m.value,CASE 
+            WHEN i.updatedtime IS NOT NULL AND i.updatedtime > i.creationtime THEN i.updatedtime
+            ELSE i.creationtime
+            END AS createdDate FROM ` + ngooid + `_intent i
             INNER JOIN school s on (i.school = s.oid) 
             INNER JOIN mastersettings m ON (i.istatus = m.value and type = 'intentstatus')
             WHERE i.status = 1 AND i.status != 0 ORDER BY istatus,intentfor desc`);
@@ -46,16 +51,48 @@ export const insertIntent = async (datavalues, ngooid) => {
 };
 
 export const updateIntent = async (datavalues, ngooid) => {
-    
-    if(istatus == 2)
-       datavalues['updationTime'] = "deliveredtime = " + new Date()
-    else if(istatus == 3)
-       datavalues['updationTime'] = "receivedtime = " + new Date()
-       
-    const { intentfor, school, totalreg, totalpresent, milk, rice, sambar, egg, shengachikki, banana, total, istatus, createdby, oid } = datavalues;
+    const { oid, istatus, createdby } = datavalues;
+    if (!oid) return { success: false, message: "Missing oid for update." };
+
+    let fields = [];
+    let values = [];
+
+    // Auto handle known fields dynamically
+    const allowedFields = [
+        "intentfor", "school"
+        , "g1totalreg", "g1totalpresent", "g1milk", "g1hotmeals", "g1egg", "g1banana", "g1total"
+        , "g2totalreg", "g2totalpresent", "g2milk", "g2hotmeals", "g2egg", "g2banana", "g2total"
+        , "g3totalreg", "g3totalpresent", "g3milk", "g3hotmeals", "g3egg", "g3banana", "g3total"
+        , "g4totalreg", "g4totalpresent", "g4milk", "g4hotmeals", "g4egg", "g4banana", "g4total"
+        , "istatus"
+    ];
+
+    allowedFields.forEach(field => {
+        if (datavalues[field] !== undefined) {
+            fields.push(`${field} = ?`);
+            values.push(datavalues[field]);
+        }
+    });
+
+    // Special handling: add deliveredtime or receivedtime
+    if (istatus == 2) {
+        fields.push("deliveredtime = NOW()");
+    } else if (istatus == 3) {
+        fields.push("receivedtime = NOW()");
+    }
+
+    // Always include audit fields
+    fields.push("updatedby = ?");
+    fields.push("updatedtime = NOW()");
+    values.push(createdby); // for updatedby
+
+    // WHERE clause
+    values.push(oid);
+
+    const query = `UPDATE ${ngooid}_intent SET ${fields.join(', ')} WHERE oid = ?`;
 
     try {
-        const [results] = await pool.query("update " + ngooid + "_intent set intentfor = ?, school = ?, totalreg = ?, totalpresent = ?, milk = ?, rice = ?, sambar = ?, egg = ?, shengachikki = ?, banana = ?, total = ?, istatus = ?, updatedby = ?, updatedtime = NOW() " + datavalues['updationTime'] + " where oid = ?;", [intentfor, school, totalreg, totalpresent, milk, rice, sambar, egg, shengachikki, banana, total, istatus, createdby, oid]);
+        const [results] = await pool.query(query, values);
         return { success: true, message: "Updated Records: " + results.affectedRows };
     } catch (error) {
         return { success: false, message: "Error: " + error.sqlMessage };

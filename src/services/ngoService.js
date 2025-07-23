@@ -32,12 +32,13 @@ export const getNgoById = async (ngooid) => {
 };
 
 export const insertNgo = async (datavalues) => {
-    const ngocode = (datavalues.ngocode)+"_intent";
+    const ngocode = (datavalues.ngocode) + "_intent";
     try {
         datavalues["uuid"] = uuidv6();
-    // console.log(Object.values(datavalues))
+        // console.log(Object.values(datavalues))
         const [results] = await pool.query("INSERT INTO ngo (" + Object.keys(datavalues) + ") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Object.values(datavalues));
-        const [intentTable] = await pool.query("CREATE TABLE "+ngocode+" LIKE intent;");
+        const [intentTable] = await pool.query("CREATE TABLE " + ngocode + " LIKE intent;");
+        const [intentTableAlter] = await pool.query(`ALTER TABLE ` + ngocode + ` ADD CONSTRAINT fk_`+ ngocode + `_school FOREIGN KEY (school) REFERENCES school(oid);`);
         return { success: true, message: "NGO Added Successfully" };
     } catch (error) {
         return { success: false, message: "Error: " + error.sqlMessage };
