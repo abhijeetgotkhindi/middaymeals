@@ -4,7 +4,7 @@ import { intentList, insertIntent, updateIntent, deleteIntent, updateIntentStatu
 export const getAllIntent = async (req, res) => {
     try {
         // Call loginUser function from auth service
-        const response = await intentList(req.params.ngooid);
+        const response = await intentList(req.params.ngooid,req.params.schooloid, req.params.datefilter);
         if (response.success) {
             return res.status(200).json(response); // Login successful
         } else {

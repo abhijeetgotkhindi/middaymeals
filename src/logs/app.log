@@ -1,12 +1,12 @@
-[2025-06-24T13:48:32.570Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-24T13:48:47.901Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T11:41:41.095Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:16:38.216Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:22:55.576Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:23:09.601Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:25:10.678Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:26:20.854Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:26:30.099Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:27:01.581Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:27:07.288Z] [INFO] TypeError: datavalues.school.split is not a function
-[2025-06-25T12:27:25.644Z] [INFO] TypeError: datavalues.school.split is not a function
+[2025-09-20T13:10:35.133Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-09-20T13:10:35.139Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-09-20T13:10:35.139Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-09-20T14:16:30.910Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-09-20T14:16:30.924Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-09-20T14:16:30.926Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-10-08T13:50:42.129Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-10-08T13:50:42.412Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-10-08T13:50:42.419Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-10-08T13:52:18.716Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-10-08T13:52:18.723Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist
+[2025-10-08T13:52:18.743Z] [INFO] Error: Table 'vorpsimp_middaymealstest.null_intent' doesn't exist

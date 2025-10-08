@@ -1,11 +1,36 @@
-import React from 'react'
+// Remove this line if it's backend code
+// import React from 'react' ❌
+
+// Correct imports for backend middleware
 import { pool } from "../config/db.js";
-
 export const verifyUserAccess = async (req, res, next) => {
-    const [rows]= await pool.query('SELECT ug.pageaccess FROM user_profile up inner join usergroup ug on (up.usergroup = ug.oid) where up.oid =  ?', [1]);
-    const hasValue = (obj, value) => Object.values(rows).includes(value);
+    try {
+        if (!req.session || !req.session.user) {
+            if (req.session) req.session.destroy(() => {});
+            res.clearCookie('connect.sid');
+            return res.redirect('/logout');
+        }
 
-console.log(hasValue(rows, 10));
-console.log(hasValue);
-next();
-}
+        const role = req.session.user.role;
+        const currentPath = req.path.replace("/", ""); // More reliable than referer
+
+        const [rows] = await pool.query(`
+            SELECT ug.oid FROM user_profile up 
+            INNER JOIN usergroup ug ON up.usergroup = ug.oid 
+            INNER JOIN pagemaster pm ON FIND_IN_SET(pm.oid, ug.pageaccess) > 0
+            WHERE ug.oid = ? AND REPLACE(pm.filename, '.php', '') = ?;
+        `, [role, currentPath]);
+
+        if (rows.length > 0) {
+            return next();
+        }
+
+        req.session.destroy(() => {});
+        res.clearCookie('connect.sid');
+        return res.redirect('/logout');
+
+    } catch (error) {
+        console.error("Error in verifyUserAccess middleware:", error);
+        return res.status(500).send("Internal Server Error");
+    }
+};

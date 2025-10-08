@@ -19,7 +19,7 @@
                     <div class="content">
                         <div class="container">
                             <div class="page-title mb-4">
-                                <h3>Intent(s) <button class="btn btn-lg btn-success float-end " data-bs-toggle="modal"
+                                <h3>Intent(s) <button class="btn btn-lg btn-success float-end" data-bs-toggle="modal"
                                         data-bs-target="#edit-modal" id="addnew" onclick="resetdata()"><i
                                             class="fas fa-plus-circle"></i> Add</button>
                                     <!-- onclick="loadForm('intent')" -->
@@ -27,10 +27,36 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 col-lg-12">
+                                      <div class="card">
+                                            <div class="content">
+                                                <div class="head row mb-3">
+                                                <h5 class="mb-0">Summary</h5>
+                                                <!--<div class="text-muted col-sm-6 col-md-6 col-lg-3 mt-3"> <select-->
+                                                <!--        id="ngo" name="ngo" class=" form-select"-->
+                                                <!--        multiple="multiple"></select>-->
+                                                <!--</div>-->
+                                                <!--<div class="text-muted col-sm-6 col-md-6 col-lg-3 mt-3"> <select-->
+                                                <!--        id="school" name="school" class=" form-select"-->
+                                                <!--        multiple="multiple"></select>-->
+                                                <!--</div>-->
+                                                <div class="text-muted col-sm-6 col-md-6 col-lg-3 mt-3">
+                                                        <div id="filterdate" class="form-select"
+                                                            style="background: #fff; cursor: pointer; padding: 7px 10px; border: 1px solid #ccc; width: 100%">
+                                                            <i class="fa fa-calendar"></i>&nbsp;
+                                                            <span></span> <i class="fa fa-caret-down"></i>
+                                                        </div>
+                                                </div>
+                                                <div class="text-muted col-sm-6 col-md-6 col-lg-3 mt-3"> <button
+                                                        type="button" class="from-select btn btn-success"
+                                                        onclick="getData();"><i class="fa fa-refresh"></i>&nbsp; Refresh</button>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
                                     <div class="card">
                                         <!-- <div class="card-header">Basic DataTables Table</div> -->
                                         <div class="card-body">
-                                            <p class="card-title"><button class="btn btn-lg btn-warning"
+                                            <p class="card-title text-end"><button class="btn btn-lg btn-warning"
                                                     id="getSelected"><i class="fa fa-tick"></i></button></p>
                                             <ul class="nav nav-tabs" id="statusTabs">
                                                 <li class="nav-item"><a class="nav-link active" id="a-tab-All"
@@ -86,12 +112,12 @@
                                     placeholder="Intent For" onchange="getholiday(this.value)" required>
                                 <label for="intentfor">Intent For</label>
                             </div>
-                            <div class="form-floating mb-3">
+                            <div class="form-floating mb-3  d-none">
                                 <label for="school" style="top: -12px;">School</label>
                                 <select id="school" name="school" class="form-select multiple-select" readonly
                                     required></select>
                             </div>
-                            <% const groupNames=["LKG & UKG", "1st - 5th Std" , "6th & 7th Std" , "8th - 10th Std" ]; %>
+                            <% const groupNames=["1st - 5th Std" , "6th & 7th Std" , "8th - 10th Std", "LKG & UKG" ]; %>
                                 <!-- Loop for Group 1 to 4 -->
                                 <% for (let i=1; i <=4; i++) { %>
 
@@ -102,14 +128,14 @@
                                         <div class="row">
                                             <div class="col-md-6 form-floating mb-3">
                                                 <input type="number" class="form-control" id="g<%= i %>totalreg"
-                                                    name="g<%= i %>totalreg" placeholder="Total Reg" required>
+                                                    name="g<%= i %>totalreg" placeholder="Total Reg" required value="">
                                                 <label for="g<%= i %>totalreg">
                                                     Total Reg
                                                 </label>
                                             </div>
                                             <div class="col-md-6 form-floating mb-3">
                                                 <input type="number" class="form-control" id="g<%= i %>totalpresent"
-                                                    name="g<%= i %>totalpresent" placeholder="Total Present" required>
+                                                    name="g<%= i %>totalpresent" placeholder="Total Present" onblur="validateTotalPresent(this.value, 'g<%= i %>totalreg','g<%= i %>totalpresent')" required>
                                                 <label for="g<%= i %>totalpresent">
                                                     Total Present
                                                 </label>
@@ -118,32 +144,32 @@
                                         <div class="row">
                                             <div class="col-md-3 form-floating mb-3">
                                                 <input type="number" class="form-control" id="g<%= i %>hotmeals"
-                                                    name="g<%= i %>hotmeals" placeholder="Hot Meals" required>
+                                                    name="g<%= i %>hotmeals" placeholder="Hot Meals" onblur="validateMealsNumbers(this.value, 'g<%= i %>hotmeals','g<%= i %>totalpresent')" required>
                                                 <label for="g<%= i %>hotmeals">Hot Meals</label>
                                             </div>
                                             <div class="col-md-3 form-floating mb-3">
                                                 <input type="number" class="form-control" id="g<%= i %>milk"
-                                                    name="g<%= i %>milk" placeholder="Milk" required>
+                                                    name="g<%= i %>milk" placeholder="Milk"  onblur="validateMilkNumbers(this.value, 'g<%= i %>milk','g<%= i %>totalpresent')" required>
                                                 <label for="g<%= i %>milk">Milk</label>
                                             </div>
                                             <div class="col-md-3 form-floating mb-3">
                                                 <input type="number" class="form-control" id="g<%= i %>egg"
-                                                    name="g<%= i %>egg" placeholder="Eggs" required>
+                                                    name="g<%= i %>egg" placeholder="Eggs" onblur="validateBananaEgg('g<%= i %>egg','g<%= i %>banana','g<%= i %>totalpresent')" required>
                                                 <label for="g<%= i %>egg">Egg</label>
                                             </div>
                                             <div class="col-md-3 form-floating mb-3">
                                                 <input type="number" class="form-control" id="g<%= i %>banana"
-                                                    name="g<%= i %>banana" placeholder="Banana" required>
+                                                    name="g<%= i %>banana" placeholder="Banana" onblur="validateBananaEgg('g<%= i %>egg','g<%= i %>banana','g<%= i %>totalpresent')" required>
                                                 <label for="g<%= i %>banana">Banana</label>
                                             </div>
                                         </div>
-                                        <div class="form-floating mb-3">
+                                        <!-- <div class="form-floating mb-3">
                                             <input type="number" class="form-control" id="g<%= i %>total"
                                                 name="g<%= i %>total" placeholder="Group <%= i %> Total" required>
                                             <label for="g<%= i %>total">
                                                 <%= groupNames[i - 1] %> Total
                                             </label>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <% } %>
                         </div>
@@ -159,14 +185,34 @@
     </div>
     <%- include('include/javascript') %>
         <script>
+            
             $(document).ready(function () {
+                
+                var start = moment().subtract(2, 'days');
+                var end = moment();
+                function cb(start, end) {
+                    $('#filterdate span').html(start.format('DD-MM-YYYY') + ' : ' + end.format('DD-MM-YYYY'));
+                }
+                $('#filterdate').daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Tomorrow': [moment().add(1, 'days'), moment().add(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }, cb);
+                
+                cb(start, end);
                 getData();
                 school(user.school);
-                $("#getSelected").hide()
-                if (user.usergroup == 1) {
-                    $("#addnew").hide()
-                }
-
+                $("#getSelected").hide();
+                (user.usergroup != 3 ? $("#addnew").hide() : $("#addnew").show()) 
+                
                 $(document).on('click', '.nav-link', function (event) {
                     if ($('#a-tab-All').hasClass('active')) {
                         $('input[type="checkbox"]').prop('disabled', true);
@@ -199,6 +245,46 @@
                     $('.rowCheckbox').prop('checked', isChecked);
                 });
             });
+            
+            const validateTotalPresent = (val, totalRegId, totalpresentId) => {
+                const totalVal = $("#"+totalRegId).val();
+                if(Number(val) > Number(totalVal)){
+                    alert("Total Present should be not be greater than Total Reg");
+                    $("#"+totalpresentId).val("0");
+                    return false;
+                }
+            }
+            
+             const validateMealsNumbers = (val, meals, totalpresentId) => {
+                const totalpresent = $("#"+totalpresentId).val();
+                if(Number(val) > Number(totalpresent)){
+                    alert("Total Hot Meals should be not be greater than Total Present");
+                    $("#"+meals).val("0");
+                    return false;
+                }
+            }
+            
+             const validateMilkNumbers = (val, milk, totalpresentId) => {
+                const totalpresent = $("#"+totalpresentId).val();
+                if(Number(val) > Number(totalpresent)){
+                    alert("Total Milk should be not be greater than Total Present");
+                    $("#"+milk).val("0");
+                    return false;
+                }
+            }
+            
+            const validateBananaEgg = (eggId, bananaId, totalpresentId) => {
+                const egg = $("#"+eggId).val();
+                const banana = $("#"+bananaId).val();
+                const totalpresent = $("#"+totalpresentId).val();
+                const eggbanana = Number(egg) + Number(banana);
+                if(Number(eggbanana) > Number(totalpresent)){
+                    alert("Egg + Milk should be not be greater than Total Present");
+                    $("#"+eggId).val("0");
+                    $("#"+bananaId).val("0");
+                    return false;
+                }
+            }
 
             const createDatatable = (tableid, data) => {
                 $(`#${tableid}-table`).DataTable({
@@ -218,40 +304,48 @@
                         },
                         { title: "Intent Date", data: "intentfor", width: "10%" },
                         { title: "School", data: "schoolname", width: "15%" },
-                        { title: "KG Total Reg", data: "g1totalreg", width: "5%" },
-                        { title: "KG Total Present", data: "g1totalpresent", width: "5%" },
-                        { title: "KG Hot Meals", data: "g1hotmeals", width: "5%" },
-                        { title: "KG Milk", data: "g1milk", width: "5%" },
-                        { title: "KG Egg", data: "g1egg", width: "5%" },
-                        { title: "KG Banana", data: "g1banana", width: "5%" },
-                        { title: "KG Total", data: "g1total", width: "5%" },
+                        { title: "Total Reg", data: "totalreg", width: "5%" },
+                        { title: "Total Present", data: "totalpresent", width: "5%" },
+                        { title: "Hot Meals", data: "hotmeals", width: "5%" },
+                        { title: "Milk", data: "milk", width: "5%" },
+                        { title: "Egg", data: "egg", width: "5%" },
+                        { title: "Banana", data: "banana", width: "5%" },
+                        // { title: "Total", data: "total", width: "5%" },
 
-                        { title: "1-5 Total Reg", data: "g2totalreg", width: "5%" },
-                        { title: "1-5 Total Present", data: "g2totalpresent", width: "5%" },
-                        { title: "1-5 Hot Meals", data: "g2hotmeals", width: "5%" },
-                        { title: "1-5 Milk", data: "g2milk", width: "5%" },
-                        { title: "1-5 Egg", data: "g2egg", width: "5%" },
-                        { title: "1-5 Banana", data: "g2banana", width: "5%" },
-                        { title: "1-5 Total", data: "g2total", width: "5%" },
+                        // { title: "KG Total Reg", data: "g1totalreg", width: "5%" },
+                        // { title: "KG Total Present", data: "g1totalpresent", width: "5%" },
+                        // { title: "KG Hot Meals", data: "g1hotmeals", width: "5%" },
+                        // { title: "KG Milk", data: "g1milk", width: "5%" },
+                        // { title: "KG Egg", data: "g1egg", width: "5%" },
+                        // { title: "KG Banana", data: "g1banana", width: "5%" },
+                        // // { title: "KG Total", data: "g1total", width: "5%" },
 
-                        { title: "6-7 Total Reg", data: "g3totalreg", width: "5%" },
-                        { title: "6-7 Total Present", data: "g3totalpresent", width: "5%" },
-                        { title: "6-7 Hot Meals", data: "g3hotmeals", width: "5%" },
-                        { title: "6-7 Milk", data: "g3milk", width: "5%" },
-                        { title: "6-7 Egg", data: "g3egg", width: "5%" },
-                        { title: "6-7 Banana", data: "g3banana", width: "5%" },
-                        { title: "6-7 Total", data: "g3total", width: "5%" },
+                        // { title: "1-5 Total Reg", data: "g2totalreg", width: "5%" },
+                        // { title: "1-5 Total Present", data: "g2totalpresent", width: "5%" },
+                        // { title: "1-5 Hot Meals", data: "g2hotmeals", width: "5%" },
+                        // { title: "1-5 Milk", data: "g2milk", width: "5%" },
+                        // { title: "1-5 Egg", data: "g2egg", width: "5%" },
+                        // { title: "1-5 Banana", data: "g2banana", width: "5%" },
+                        // // { title: "1-5 Total", data: "g2total", width: "5%" },
 
-                        { title: "8-10 Total Reg", data: "g4totalreg", width: "5%" },
-                        { title: "8-10 Total Present", data: "g4totalpresent", width: "5%" },
-                        { title: "8-10 Hot Meals", data: "g4hotmeals", width: "5%" },
-                        { title: "8-10 Milk", data: "g4milk", width: "5%" },
-                        { title: "8-10 Egg", data: "g4egg", width: "5%" },
-                        { title: "8-10 Banana", data: "g4banana", width: "5%" },
-                        { title: "8-10 Total", data: "g4total", width: "5%" },
+                        // { title: "6-7 Total Reg", data: "g3totalreg", width: "5%" },
+                        // { title: "6-7 Total Present", data: "g3totalpresent", width: "5%" },
+                        // { title: "6-7 Hot Meals", data: "g3hotmeals", width: "5%" },
+                        // { title: "6-7 Milk", data: "g3milk", width: "5%" },
+                        // { title: "6-7 Egg", data: "g3egg", width: "5%" },
+                        // { title: "6-7 Banana", data: "g3banana", width: "5%" },
+                        // // { title: "6-7 Total", data: "g3total", width: "5%" },
+
+                        // { title: "8-10 Total Reg", data: "g4totalreg", width: "5%" },
+                        // { title: "8-10 Total Present", data: "g4totalpresent", width: "5%" },
+                        // { title: "8-10 Hot Meals", data: "g4hotmeals", width: "5%" },
+                        // { title: "8-10 Milk", data: "g4milk", width: "5%" },
+                        // { title: "8-10 Egg", data: "g4egg", width: "5%" },
+                        // { title: "8-10 Banana", data: "g4banana", width: "5%" },
+                        // { title: "8-10 Total", data: "g4total", width: "5%" },
                         {
                             title: "Status", render: function (data, type, row) {
-                                let btn = "btn-info";
+                                let btn = "btn-primary";
                                 if (row.istatus == "Received")
                                     btn = "btn-success";
                                 else if (row.istatus == "Created") {
@@ -283,6 +377,10 @@
                     ordering: true,
                     language: {
                         emptyTable: "No data available"
+                    },
+                    initComplete: function () {
+                        // Automatically click the "Show All" button after DataTable initialization
+                        document.querySelector('button[data-group="G"]')?.click();
                     }
                 });
 
@@ -296,37 +394,38 @@
                 return '<button class="' + buttonClass + ' ' + buttonType + '" ' + buttonFn + ' type="button" >' + buttonText + '</button>&nbsp;&nbsp;';
             }
 
-            const groupColumns = {
-                G: [],
-                G1: [0, 1, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-                G2: [0, 1, 4, 5, 6, 7, 8, 9, 10, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-                G3: [0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 25, 26, 27, 28, 29, 30, 31],
-                G4: [0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-            };
-            const allColumns = [...Array(36).keys()]; // [0 to 35]
-            function toggleGroup(group, btnElement) {
-                $('#loader').fadeIn();
-                const tableId = $(".tab-pane.active table").attr("id");
-                const table = $(`#${tableId}`).DataTable();
+            // const groupColumns = {
+            //     // G: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36],
+            //     G: [0,1,2,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 35],
+            //     G1: [0,1,2, 4, 5, 6, 7, 8, 9, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 35],
+            //     G2: [0,1,2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 35],
+            //     G3: [0,1,2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 28, 29, 30, 31, 32, 33, 35],
+            //     G4: [0,1,2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 35]
+            // };
+            // const allColumns = [...Array(36).keys()]; // [0 to 35]
+            // function toggleGroup(group, btnElement) {
+            //     $('#loader').fadeIn();
+            //     const tableId = $(".tab-pane.active table").attr("id");
+            //     const table = $(`#${tableId}`).DataTable();
 
-                const allColumns = [...Array(table.columns().count()).keys()];
-                const hideCols = groupColumns[group];
-                const showCols = allColumns.filter(i => !hideCols.includes(i));
+            //     const allColumns = [...Array(table.columns().count()).keys()];
+            //     const hideCols = groupColumns[group];
+            //     const showCols = allColumns.filter(i => !hideCols.includes(i));
 
-                allColumns.forEach(colIndex => {
-                    const shouldShow = showCols.includes(colIndex);
-                    table.column(colIndex).visible(shouldShow);
-                });
+            //     allColumns.forEach(colIndex => {
+            //         const shouldShow = showCols.includes(colIndex);
+            //         table.column(colIndex).visible(shouldShow);
+            //     });
 
-                // Remove active class from all buttons
-                document.querySelectorAll('.group-toggle').forEach(btn => btn.classList.remove('active'));
-                // Add active class to the clicked button
-                if (btnElement) {
-                    btnElement.classList.add('active');
-                }
-                $('#loader').fadeOut();
+            //     // Remove active class from all buttons
+            //     document.querySelectorAll('.group-toggle').forEach(btn => btn.classList.remove('active'));
+            //     // Add active class to the clicked button
+            //     if (btnElement) {
+            //         btnElement.classList.add('active');
+            //     }
+            //     $('#loader').fadeOut();
 
-            }
+            // }
 
 
             const renderGroupedTabs = (responseData) => {
@@ -337,16 +436,16 @@
 
                 // statusTabs.innerHTML = '';
                 statusTabContent.innerHTML = '';
-                const groupPane = document.createElement("div");
-                groupPane.innerHTML = `
-                    <div class="mb-2">
-                        <button class="btn btn-outline-primary btn-sm me-2 group-toggle active" data-group="G" onclick="toggleGroup('G', this)">Show All</button>
-                        <button class="btn btn-outline-primary btn-sm me-2 group-toggle" data-group="G1" onclick="toggleGroup('G1', this)">KG Std</button>
-                        <button class="btn btn-outline-primary btn-sm me-2 group-toggle" data-group="G2" onclick="toggleGroup('G2', this)">1-5 Std</button>
-                        <button class="btn btn-outline-primary btn-sm me-2 group-toggle" data-group="G3" onclick="toggleGroup('G3', this)">6-7 Std</button>
-                        <button class="btn btn-outline-primary btn-sm me-2 group-toggle" data-group="G4" onclick="toggleGroup('G4', this)">8-10 Std</button>
-                    </div> `
-                statusTabContent.appendChild(groupPane);
+                // const groupPane = document.createElement("div");
+                // groupPane.innerHTML = `
+                //     <div class="mb-2">
+                //         <button class="btn btn-outline-primary btn-sm me-2 group-toggle active" data-group="G" onclick="toggleGroup('G', this)">Show All</button>
+                //         <button class="btn btn-outline-primary btn-sm me-2 group-toggle" data-group="G1" onclick="toggleGroup('G1', this)">KG Std</button>
+                //         <button class="btn btn-outline-primary btn-sm me-2 group-toggle" data-group="G2" onclick="toggleGroup('G2', this)">1-5 Std</button>
+                //         <button class="btn btn-outline-primary btn-sm me-2 group-toggle" data-group="G3" onclick="toggleGroup('G3', this)">6-7 Std</button>
+                //         <button class="btn btn-outline-primary btn-sm me-2 group-toggle" data-group="G4" onclick="toggleGroup('G4', this)">8-10 Std</button>
+                //     </div> `
+                // statusTabContent.appendChild(groupPane);
                 let tabIndex = 0;
 
                 // --- Add "All" tab first ---
@@ -377,6 +476,15 @@
                         createDatatable(tabId, grouped[status])
                     }
                 });
+                if(Object.keys(grouped).length == 0){
+                    $('.nav-link').each(function(i, obj) {
+                        if((obj.id).startsWith("a-tab-")){
+                            const status = obj.id.replaceAll("a-tab-","");
+                            $("#a-tab-" + status).html(status + ' (0)');
+                        }
+                    });
+                }
+                
                 $('input[type="checkbox"]').prop('disabled', true);
                 $('#loader').fadeOut();
             }
@@ -391,7 +499,7 @@
             const getData = async () => {
                 $('#loader').fadeIn();
                 try {
-                    const response = await apiRequest('get', '/api/intent/' + sessionStorage.getItem("ngocode"));
+                    const response = await apiRequest('get', '/api/intent/' + sessionStorage.getItem("ngocode") + '/'+user.school+'/' + $('#filterdate span').html() );
                     renderGroupedTabs(response.data);
                     $('#loader').fadeOut();
                 } catch (error) {
@@ -464,9 +572,9 @@
                     const response = await apiRequest(method, url, data);
                     if (response.data.status)
                         toastr.success(response.data.message);
-                    window.location.reload();
-                    // $("#a-tab-All").trigger('click');
-                    // getData();
+                   // window.location.reload();
+                     $("#a-tab-All").trigger('click');
+                     getData();
                     $('#loader').fadeOut();
                 } catch (error) {
                     toastr.error(error.response.data.message);
@@ -482,11 +590,12 @@
                 const holidayss = await holiday();
                 const holidaysArray = holidayss.map(item => item.holidays);
                 const holidays = holidaysArray;
+                console.log(holidays);
                 // Disable weekends and holidays
                 const selectedDate = new Date(val);
                 const day = selectedDate.getUTCDay(); // 0 (Sun) - 6 (Sat)
                 // Check if weekend
-                const isWeekend = (day === 0 || day === 6);
+                const isWeekend = (day === 0);// || day === 6
                 // Check if holiday
                 const isHoliday = holidays.includes(val);
                 if (isWeekend || isHoliday) {
@@ -498,7 +607,18 @@
 
             const resetdata = () => {
                 $('#loader').fadeIn();
-                $("input").val("");
+                $('input').each(function () {
+                    if (!(this.id).includes("totalreg")) {
+                        $(this).val(""); // reset only this input
+                    } else {
+                        $(this).attr("readonly", "readonly");
+                    }
+                
+                    if (this.type === "number") {
+                        $(this).val(0); // set 0 only for numbers
+                    }
+                });
+                school(user.school);
                 const holidays = ['2025-06-03', '2025-06-02']; // Example holidays
                 const defaultDate = getNextBusinessDay(holidays, true/*excludeWeekends*/); // allow weekends
                 document.getElementById('intentfor').value = defaultDate;

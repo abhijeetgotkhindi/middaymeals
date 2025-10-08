@@ -24,7 +24,7 @@
         }
         else {
             if ((document.referrer).includes('login')) {
-                dashboardNgo();
+                //dashboardNgo();
                 toastr.info("Welcome " + user.displayname);
             }
         }
@@ -186,6 +186,8 @@
                 }
                 else if ($("#" + key).is('input')) {
                     $("#" + key).val(val[key]);
+                    if (key.includes("totalreg"))
+                        $("#" + key).attr("readonly", "readonly");
                 }
                 else if ($("#" + key).is('select')) {
                     if (val[key] != null) {
@@ -291,8 +293,17 @@
             const result = response.data.schools;
             $('#school option').filter('option').remove();
             $('#school').multipleSelect('destroy');
-            for (var key in result)
+            for (var key in result) {
                 $('#school').append($('<option />', { value: result[key]['oid'], text: result[key]['schoolname'] }))
+                if (document.getElementById("g1totalreg"))
+                    $("#g1totalreg").val(result[key]['lkg'] + result[key]['ukg']);
+                if (document.getElementById("g2totalreg"))
+                    $("#g2totalreg").val(result[key]['1std'] + result[key]['2std'] + result[key]['3std'] + result[key]['4std'] + result[key]['5std']);
+                if (document.getElementById("g3totalreg"))
+                    $("#g3totalreg").val(result[key]['6std'] + result[key]['7std']);
+                if (document.getElementById("g4totalreg"))
+                    $("#g4totalreg").val(result[key]['8std'] + result[key]['9std'] + result[key]['10std']);
+            }
 
             $('#school').multipleSelect({ placeholder: 'School' });
             $('#loader').fadeOut();
@@ -380,7 +391,7 @@
 
     const holiday = async () => {
         try {
-            const response = await apiRequest('get', '/api/holiday/' + user.ngo);
+            const response = await apiRequest('get', '/api/holiday/' + user.school);
             const result = response.data.holiday;
             return result;
         } catch (error) {

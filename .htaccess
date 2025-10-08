@@ -1,0 +1,11 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/vorpsimp/public_html/middaymealsuat"
+PassengerBaseURI "/"
+PassengerNodejs "/home/vorpsimp/nodevenv/public_html/middaymealsuat/20/bin/node"
+PassengerAppType node
+PassengerStartupFile loader.cjs
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END

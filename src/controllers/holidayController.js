@@ -1,5 +1,5 @@
 
-import { holidayList, insertHoliday, updateHoliday, deleteHoliday, ngoschoolholidayList } from '../services/holidayService.js';
+import { holidayList, insertHoliday, updateHoliday, deleteHoliday, schoolholidayList } from '../services/holidayService.js';
 
 // Function to get all users
 export const getAllHoliday = async (req, res) => {
@@ -20,10 +20,10 @@ export const getAllHoliday = async (req, res) => {
     }
 };
 
-export const getngoschoolholidayList = async (req, res) => {
+export const getschoolholidayList = async (req, res) => {
     try {
         // Call loginUser function from auth service
-        const response = await ngoschoolholidayList(req.params.ngooid);
+        const response = await schoolholidayList(req.params.schooloid);
         if (response.success) {
             return res.status(200).json(response); // Login successful
         } else {

@@ -4,10 +4,9 @@ import { v6 as uuidv6 } from 'uuid';
 export const holidayList = async () => {
     try {
         const [holiday] = await pool.query(`SELECT h.oid,DATE_FORMAT(h.holidaydate,'%a %d-%m-%Y') AS holidaydate,DATE_FORMAT(h.holidaydate,'%Y-%m-%d') as holidays,h.holidaydescription, h.kholidaydescription,h.school, GROUP_CONCAT(DISTINCT s.schoolname) as schoolname FROM holidaymaster h
-inner join school s on FIND_IN_SET(s.oid,h.school)
-INNER JOIN ngo n on (n.oid = s.ngo)
+INNER JOIN school s on FIND_IN_SET(s.oid,h.school)
 WHERE h.status = 1
-group by h.oid;`);
+GROUP BY h.oid;`);
         if (holiday.length === 0) {
             return { success: true, message: 'Data not found', holiday: [] };
         }
@@ -18,13 +17,12 @@ group by h.oid;`);
     }
 };
 
-export const ngoschoolholidayList = async (ngooid) => {
+export const schoolholidayList = async (schooloid) => {
     try {
         const [holiday] = await pool.query(`SELECT h.oid,DATE_FORMAT(h.holidaydate,'%a %d-%m-%Y') AS holidaydate,DATE_FORMAT(h.holidaydate,'%Y-%m-%d') as holidays,h.holidaydescription, h.kholidaydescription,h.school, GROUP_CONCAT(DISTINCT s.schoolname) as schoolname FROM holidaymaster h
 inner join school s on FIND_IN_SET(s.oid,h.school)
-INNER JOIN ngo n on (n.oid = s.ngo)
-WHERE h.status = 1 AND n.oid IN (?)
-group by h.oid;`,[ngooid.split(',')]);
+WHERE h.status = 1 AND s.oid IN (?)
+group by h.oid;`,[schooloid.split(',')]);
         if (holiday.length === 0) {
             return { success: true, message: 'Data not found', holiday: [] };
         }

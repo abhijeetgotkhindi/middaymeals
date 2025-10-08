@@ -46,6 +46,22 @@
                 <div class="modal-body text-start">
                     <form id="schoolform" action="" method="POST" enctype="multipart/form-data">
                         <div class="form-floating mb-3">
+                            <select id="class" name="class" class="multiple-select input-group" placeholder="Class" multiple required>
+                                <option value="-1">LKG</option>
+                                <option value="0">UKG</option>
+                                <option value="1">1STD</option>
+                                <option value="2">2STD</option>
+                                <option value="3">3STD</option>
+                                <option value="4">4STD</option>
+                                <option value="5">5STD</option>
+                                <option value="6">6STD</option>
+                                <option value="7">7STD</option>
+                                <option value="8">8STD</option>
+                                <option value="9">9STD</option>
+                                <option value="10">10STD</option>
+                            </select>
+                        </div>
+                        <div class="form-floating mb-3">
                             <select id="ngo" name="ngo" class="multiple-select input-group" required></select>
                         </div>
                         <div class="form-floating mb-3">
@@ -101,7 +117,7 @@
                             <label for="headmastername">Headmaster Name</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="headmasterno" name="headmasterno"
+                            <input type="text" class="form-control" id="headmasterno" name="headmasterno"
                                 placeholder="headmasterno" required>
                             <label for="headmasterno">Headmaster Number</label>
                         </div>
@@ -110,174 +126,208 @@
                                 placeholder="headmasteremail" required>
                             <label for="headmasteremail">Headmaster Email</label>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std1_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="1std_female" name="1std_female"
-                                    title="1std" placeholder="1std Female" onblur="sum(this.title)" required>
+                                    title="1std" placeholder="1std Female" onblur="sum(this.title)" >
                                 <label for="1std_female" style="left: 12px;">1std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="1std_male" name="1std_male" title="1std"
-                                    placeholder="1std Male" onblur="sum(this.title)" required>
+                                    placeholder="1std Male" onblur="sum(this.title)" >
                                 <label for="1std_male" style="left: 12px;">1std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="1std" name="1std" placeholder="1std"
-                                    readonly required>
+                                    readonly >
                                 <label for="1std" style="left: 12px;">1std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std2_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="2std_female" name="2std_female"
-                                    title="2std" placeholder="2std Female" onblur="sum(this.title)" required>
+                                    title="2std" placeholder="2std Female" onblur="sum(this.title)" >
                                 <label for="2std_female" style="left: 12px;">2std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="2std_male" name="2std_male" title="2std"
-                                    placeholder="2std Male" onblur="sum(this.title)" required>
+                                    placeholder="2std Male" onblur="sum(this.title)" >
                                 <label for="2std_male" style="left: 12px;">2std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="2std" name="2std" placeholder="2std"
-                                    readonly required>
-                                <label for="2std" style="left: 12px;">4std Total</label>
+                                    readonly >
+                                <label for="2std" style="left: 12px;">2std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std3_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="3std_female" name="3std_female"
-                                    title="3std" placeholder="3std Female" onblur="sum(this.title)" required>
+                                    title="3std" placeholder="3std Female" onblur="sum(this.title)" >
                                 <label for="3std_female" style="left: 12px;">3std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="3std_male" name="3std_male" title="3std"
-                                    placeholder="3std Male" onblur="sum(this.title)" required>
+                                    placeholder="3std Male" onblur="sum(this.title)" >
                                 <label for="3std_male" style="left: 12px;">3std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="3std" name="3std" placeholder="3std"
-                                    readonly required>
+                                    readonly >
                                 <label for="3std" style="left: 12px;">3std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std4_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="4std_female" name="4std_female"
-                                    title="4std" placeholder="4std Female" onblur="sum(this.title)" required>
+                                    title="4std" placeholder="4std Female" onblur="sum(this.title)" >
                                 <label for="4std_female" style="left: 12px;">4std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="4std_male" name="4std_male" title="4std"
-                                    placeholder="4std Male" onblur="sum(this.title)" required>
+                                    placeholder="4std Male" onblur="sum(this.title)" >
                                 <label for="4std_male" style="left: 12px;">4std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="4std" name="4std" placeholder="4std"
-                                    readonly required>
+                                    readonly >
                                 <label for="4std" style="left: 12px;">4std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std5_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="5std_female" name="5std_female"
-                                    title="5std" placeholder="5std Female" onblur="sum(this.title)" required>
+                                    title="5std" placeholder="5std Female" onblur="sum(this.title)" >
                                 <label for="5std_female" style="left: 12px;">5std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="5std_male" name="5std_male" title="5std"
-                                    placeholder="5std Male" onblur="sum(this.title)" required>
+                                    placeholder="5std Male" onblur="sum(this.title)" >
                                 <label for="5std_male" style="left: 12px;">5std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="5std" name="5std" placeholder="5std"
-                                    readonly required>
+                                    readonly >
                                 <label for="5std" style="left: 12px;">5std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std6_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="6std_female" name="6std_female"
-                                    title="6std" placeholder="6std Female" onblur="sum(this.title)" required>
+                                    title="6std" placeholder="6std Female" onblur="sum(this.title)" >
                                 <label for="6std_female" style="left: 12px;">6std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="6std_male" name="6std_male" title="6std"
-                                    placeholder="6std Male" onblur="sum(this.title)" required>
+                                    placeholder="6std Male" onblur="sum(this.title)" >
                                 <label for="6std_male" style="left: 12px;">6std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="6std" name="6std" placeholder="6std"
-                                    readonly required>
+                                    readonly >
                                 <label for="6std" style="left: 12px;">6std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std7_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="7std_female" name="7std_female"
-                                    title="7std" placeholder="7std Female" onblur="sum(this.title)" required>
+                                    title="7std" placeholder="7std Female" onblur="sum(this.title)" >
                                 <label for="7std_female" style="left: 12px;">7std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="7std_male" name="7std_male" title="7std"
-                                    placeholder="7std Male" onblur="sum(this.title)" required>
+                                    placeholder="7std Male" onblur="sum(this.title)" >
                                 <label for="7std_male" style="left: 12px;">7std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="7std" name="7std" placeholder="7std"
-                                    readonly required>
+                                    readonly >
                                 <label for="7std" style="left: 12px;">7std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std8_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="8std_female" name="8std_female"
-                                    title="8std" placeholder="8std Female" onblur="sum(this.title)" required>
+                                    title="8std" placeholder="8std Female" onblur="sum(this.title)" >
                                 <label for="8std_female" style="left: 12px;">8std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="8std_male" name="8std_male" title="8std"
-                                    placeholder="8std Male" onblur="sum(this.title)" required>
+                                    placeholder="8std Male" onblur="sum(this.title)" >
                                 <label for="8std_male" style="left: 12px;">8std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="8std" name="8std" placeholder="8std"
-                                    readonly required>
+                                    readonly >
                                 <label for="8std" style="left: 12px;">8std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;" id="std9_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="9std_female" name="9std_female"
-                                    title="8std" placeholder="9std Female" onblur="sum(this.title)" required>
+                                    title="8std" placeholder="9std Female" onblur="sum(this.title)" >
                                 <label for="9std_female" style="left: 12px;">9std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="9std_male" name="8std_male" title="9std"
-                                    placeholder="9std Male" onblur="sum(this.title)" required>
+                                    placeholder="9std Male" onblur="sum(this.title)" >
                                 <label for="9std_male" style="left: 12px;">9std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="9std" name="9std" placeholder="9std"
-                                    readonly required>
+                                    readonly >
                                 <label for="9std" style="left: 12px;">9std Total</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="display: none;"  id="std10_div">
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="10std_female" name="10std_female"
-                                    title="10std" placeholder="10std Female" onblur="sum(this.title)" required>
+                                    title="10std" placeholder="10std Female" onblur="sum(this.title)" >
                                 <label for="10std_female" style="left: 12px;">10std Female</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="10std_male" name="10std_male"
-                                    title="10std" placeholder="10std Male" onblur="sum(this.title)" required>
+                                    title="10std" placeholder="10std Male" onblur="sum(this.title)" >
                                 <label for="10std_male" style="left: 12px;">10std Male</label>
                             </div>
                             <div class="form-floating mb-3 col-md-4">
                                 <input type="number" class="form-control" id="10std" name="10std" placeholder="10std"
-                                    readonly required>
+                                    readonly >
                                 <label for="10std" style="left: 12px;">10std Total</label>
+                            </div>
+                        </div>
+                        <div class="row" style="display: none;" id="std-1_div">
+                            <div class="form-floating mb-3 col-md-4">
+                                <input type="number" class="form-control" id="lkg_female" name="lkg_female"
+                                    title="LKG" placeholder="LKG Female" onblur="sum(this.title)" >
+                                <label for="lkg_female" style="left: 12px;">LKG Female</label>
+                            </div>
+                            <div class="form-floating mb-3 col-md-4">
+                                <input type="number" class="form-control" id="lkg_female" name="lkg_female"
+                                    title="LKG" placeholder="LKG Male" onblur="sum(this.title)" >
+                                <label for="lkg_female" style="left: 12px;">LKG Male</label>
+                            </div>
+                            <div class="form-floating mb-3 col-md-4">
+                                <input type="number" class="form-control" id="lkg" name="lkg" placeholder="LKG"
+                                    readonly >
+                                <label for="lkg" style="left: 12px;">LKG Total</label>
+                            </div>
+                        </div>
+                        <div class="row" style="display: none;" id="std0_div">
+                            <div class="form-floating mb-3 col-md-4">
+                                <input type="number" class="form-control" id="ukg_female" name="ukg_female"
+                                    title="ukg" placeholder="ukg Female" onblur="sum(this.title)" >
+                                <label for="ukg_female" style="left: 12px;">UKG Female</label>
+                            </div>
+                            <div class="form-floating mb-3 col-md-4">
+                                <input type="number" class="form-control" id="ukg_female" name="ukg_female"
+                                    title="ukg" placeholder="UKG Male" onblur="sum(this.title)" >
+                                <label for="ukg_female" style="left: 12px;">ukg Male</label>
+                            </div>
+                            <div class="form-floating mb-3 col-md-4">
+                                <input type="number" class="form-control" id="ukg" name="ukg" placeholder="UKG"
+                                    readonly >
+                                <label for="ukg" style="left: 12px;">UKG Total</label>
                             </div>
                         </div>
                         <input type="hidden" id="createdby" name="createdby" value="">
@@ -293,6 +343,24 @@
     <%- include('include/javascript') %>
         <script>
             $(document).ready(function () {
+                $('#class').multipleSelect({
+                    filter: true,
+                    onClose: function () {
+                        const classArray = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                        let classstd = $('#class').multipleSelect('getSelects').map(Number);
+                        for (const std of classArray) {
+                            if (classstd.includes(std)) {
+                                $(`#std${std}_div`).show();
+                                $(`#std${std}_div`).find("input").attr("required", true);
+                                // $(`#std${std}_div`).attr('required', 'required');
+                            } else {
+                                $(`#std${std}_div`).hide();
+                                $(`#std${std}_div`).find("input").removeAttr("required");
+                                // $(`#std${std}_div`).removeAttr('required')
+                            }
+                        }
+                    },
+                })
                 getData();
                 village(0);
                 taluka(0);
@@ -342,10 +410,14 @@
                                     return (row['6std'] || 0) + (row['7std'] || 0);
                                 }
                             },
-                            { title: "8th Class", data: "6std" },
                             {
-                                title: "9-10 Class", render: function (data, type, row) {
-                                    return (row['9std'] || 0) + (row['10std'] || 0);
+                                title: "8-10 Class", render: function (data, type, row) {
+                                    return (row['8std'] || 0) + (row['9std'] || 0) + (row['10std'] || 0);
+                                }
+                            },
+                            {
+                                title: "LKG-UKG Class", render: function (data, type, row) {
+                                    return (row['lkg'] || 0) + (row['ukg'] || 0);
                                 }
                             },
                             {

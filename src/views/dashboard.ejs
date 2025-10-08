@@ -161,26 +161,13 @@
                                                                     <div class="d-flex px-2 py-1">
                                                                         <div
                                                                             class="d-flex flex-column justify-content-center">
-                                                                            <h6 class="mb-0 text-sm">Rice</h6>
+                                                                            <h6 class="mb-0 text-sm">Hot Meals</h6>
                                                                         </div>
                                                                     </div>
                                                                 </td>
                                                                 <td class="text-end"><span
                                                                         class="text-xs font-weight-bold"
-                                                                        id="rice">0</span></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="d-flex px-2 py-1">
-                                                                        <div
-                                                                            class="d-flex flex-column justify-content-center">
-                                                                            <h6 class="mb-0 text-sm">Sambar</h6>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-end"><span
-                                                                        class="text-xs font-weight-bold"
-                                                                        id="sambar">0</span></td>
+                                                                        id="hotmeals">0</span></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
@@ -207,19 +194,6 @@
                                                                 <td class="text-end"><span
                                                                         class="text-xs font-weight-bold"
                                                                         id="egg">0</span></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="d-flex px-2 py-1">
-                                                                        <div
-                                                                            class="d-flex flex-column justify-content-center">
-                                                                            <h6 class="mb-0 text-sm"> Chikki</h6>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-end"><span
-                                                                        class="text-xs font-weight-bold"
-                                                                        id="shengachikki">0</span></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
@@ -316,9 +290,12 @@
 
                 cb(start, end);
                 ngo(user.ngo)
-                school(user.school)
-                
+                school(user.school);
+                $("#ngo").multipleSelect({ filter: true });
+                $("#school").multipleSelect({ filter: true });                
                 getCalendar();
+                sessionStorage.getItem('ngocode') === null ? dashboardNgo() : '' ;
+                
             });
 
             const getCalendar = async () => {
@@ -343,13 +320,13 @@
 
             const dashboard = () => {
                 const data = {};
-                const ngo = $("#ngo").multipleSelect('getSelects').toString();
-                const school = $("#school").multipleSelect('getSelects').toString();
+               const ngo = $("#ngo").multipleSelect('getSelects');
+                const school = $("#school").multipleSelect('getSelects');
                 data['ngocode'] = sessionStorage.getItem('ngocode');
                 data['startdate'] = $("#date span").html().split(" - ")[0];
                 data['enddate'] = $("#date span").html().split(" - ")[1];
-                data['ngo'] = ngo == '' ? user.ngo : ngo;
-                data['school'] = school == '' ? user.school : school;
+                data['ngo'] = ngo.length === 0 ? user.ngo : ngo.toString();
+                data['school'] = school.length === 0 ? user.school : school.toString();
                 apiRequest('post', '/api/dashboard/', data)
                     .then(response => {
                         const result = response.data.dashboardValues[0];
